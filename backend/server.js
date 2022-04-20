@@ -1,4 +1,5 @@
 require('dotenv').config({ path: 'config/config.env' });
+//require('dotenv').config()
 const app = require('./app');
 
 // database
