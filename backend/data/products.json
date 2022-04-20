@@ -1,0 +1,38 @@
+[
+  {
+    "name": "sanDisk memory card",
+    "price": "45.89",
+    "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+    "ratings": 4.5,
+    "images": [],
+    "category": "Electronics",
+    "seller": "Ebay",
+    "stock": 50,
+    "numOfReviews": 32,
+    "reviews": []
+  },
+  {
+    "name": "keyboard",
+    "price": "34.89",
+    "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+    "ratings": 4.4,
+    "images": [],
+    "category": "Electronics",
+    "seller": "Ebay",
+    "stock": 25,
+    "numOfReviews": 16,
+    "reviews": []
+  },
+  {
+    "name": "LG sub-woofer",
+    "price": "67.22",
+    "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+    "ratings": 4.5,
+    "images": [],
+    "category": "Electronics",
+    "seller": "Ebay",
+    "stock": 76,
+    "numOfReviews": 23,
+    "reviews": []
+  }
+]
