@@ -9,9 +9,11 @@ exports.newProduct = async (req, res, next) => {
   });
 };
 
-exports.getProducts = (req, res, next) => {
+exports.getProducts = async (req, res, next) => {
+  const products = await Product.find({})
   res.status(StatusCodes.OK).json({
     success: true,
-    message: 'This route will show products in the database',
+    count: products.length,
+    message: products,
   });
 };
