@@ -1,6 +1,8 @@
 const { StatusCodes } = require('http-status-codes');
 const Product = require('../models/Product');
 
+const ErrorHandler = require('../utils/errorHandler');
+
 exports.newProduct = async (req, res, next) => {
   const product = await Product.create(req.body);
   res.status(StatusCodes.CREATED).json({
@@ -22,10 +24,7 @@ exports.getSingleProduct = async (req, res, next) => {
   const { id: productId } = req.params;
   const product = await Product.findById(productId);
   if (!product) {
-    return res.status(StatusCodes.NOT_FOUND).json({
-      success: false,
-      message: 'product not found',
-    });
+    return next(new ErrorHandler('product not found', StatusCodes.NOT_FOUND));
   }
   res.status(StatusCodes.OK).json({ success: true, product });
 };
@@ -34,10 +33,7 @@ exports.updateProduct = async (req, res, next) => {
   const { id: productId } = req.params;
   let product = await Product.findById(productId);
   if (!product) {
-    return res.status(StatusCodes.NOT_FOUND).json({
-      success: false,
-      message: 'product not found',
-    });
+    return next(new ErrorHandler('product not found', StatusCodes.NOT_FOUND));
   }
 
   product = await Product.findByIdAndUpdate(productId, req.body, {
@@ -52,10 +48,7 @@ exports.deleteProduct = async (req, res, next) => {
   const { id: productId } = req.params;
   let product = await Product.findById(productId);
   if (!product) {
-    return res.status(StatusCodes.NOT_FOUND).json({
-      success: false,
-      message: 'product not found',
-    });
+    return next(new ErrorHandler('product not found', StatusCodes.NOT_FOUND));
   }
   await product.remove();
   res.status(200).json({
