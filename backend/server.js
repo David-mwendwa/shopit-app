@@ -2,6 +2,13 @@ require('dotenv').config({ path: 'config/config.env' });
 //require('dotenv').config()
 const app = require('./app');
 
+// handle uncought exceptions
+process.on('uncaughtException', (err) => {
+  console.log(`ERROR: ${err.message}`);
+  console.log(`Shutting down the server due to uncaught exceptions`);
+  process.exit(1);
+});
+
 // database
 const connectDB = require('./db/connect');
 
@@ -16,9 +23,7 @@ const server = app.listen(port, () =>
 process.on('unhandledRejection', (err) => {
   console.log(`ERROR: ${err.message}`);
   console.log(`Shutting down the server due to unhandled promise rejection`);
-  server.close(() => {
-    process.exit(1);
-  });
+  server.close(() => process.exit(1));
 });
 
 // // connection
