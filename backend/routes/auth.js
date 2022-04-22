@@ -5,12 +5,14 @@ const {
   registerUser,
   loginUser,
   forgotPassword,
+  resetPassword,
   logout,
 } = require('../controllers/authController');
 
 router.route('/register').post(registerUser);
 router.route('/login').post(loginUser);
 router.route('/password/forgot').post(forgotPassword);
+router.route('/password/reset/:token').patch(resetPassword);
 router.route('/logout').get(logout);
 
 module.exports = router;
