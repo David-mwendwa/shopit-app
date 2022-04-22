@@ -30,3 +30,33 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
     token,
   });
 });
+
+// login user => /api/v1/login
+exports.loginUser = catchAsyncErrors(async (req, res, next) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return next(
+      new ErrorHandler(
+        'Please enter email and password',
+        StatusCodes.BAD_REQUEST
+      )
+    );
+  }
+  const user = await User.findOne({ email }).select('+password');
+  if (!user) {
+    return next(
+      new ErrorHandler('Incorrect email or password', StatusCodes.NOT_FOUND)
+    );
+  }
+  const isPasswordCorrect = await user.comparePassword(password);
+  if (!isPasswordCorrect) {
+    return next(
+      new ErrorHandler('Incorrect email or password', StatusCodes.NOT_FOUND)
+    );
+  }
+  const token = user.getJwtToken();
+  res.status(StatusCodes.OK).json({
+    success: true,
+    token,
+  });
+});
