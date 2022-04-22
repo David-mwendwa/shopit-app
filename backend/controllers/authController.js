@@ -2,6 +2,7 @@ const { StatusCodes } = require('http-status-codes');
 const User = require('../models/User');
 const ErrorHandler = require('../utils/errorHandler');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
+const sendToken = require('../utils/jwt');
 
 // Register user => /api/v1/register
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
@@ -54,9 +55,5 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
       new ErrorHandler('Incorrect email or password', StatusCodes.NOT_FOUND)
     );
   }
-  const token = user.getJwtToken();
-  res.status(StatusCodes.OK).json({
-    success: true,
-    token,
-  });
+  sendToken(user, StatusCodes.OK, res);
 });
