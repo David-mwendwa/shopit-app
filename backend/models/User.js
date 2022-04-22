@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 const validator = require('validator');
 
@@ -41,4 +42,12 @@ const userSchema = new mongoose.Schema({
   resetPasswordExpire: Date,
 });
 
-module.exports = mongoose.nodel('User', userSchema);
+// encrypting password before saving user;
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) {
+    next();
+  }
+  this.password = await bcrypt.hash(this.password, 10);
+});
+
+module.exports = mongoose.model('User', userSchema);

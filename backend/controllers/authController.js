@@ -1,0 +1,30 @@
+const { StatusCodes } = require('http-status-codes');
+const User = require('../models/User');
+const ErrorHandler = require('../utils/errorHandler');
+const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
+
+// Register user => /api/v1/register
+exports.registerUser = catchAsyncErrors(async (req, res, next) => {
+  const { name, email, password } = req.body;
+  if (!name || !email || !password) {
+    return next(
+      new ErrorHandler(
+        'Please provide name, email and password',
+        StatusCodes.BAD_REQUEST
+      )
+    );
+  }
+  const user = await User.create({
+    name,
+    email,
+    password,
+    avatar: {
+      public_id: 'kccvibpsuiusmwfepb3m',
+      url: 'https://res.cloudinary.com/shopit/image/upload/v1606305757/avatars/kccvibpsuiusmwfepb3m.png',
+    },
+  });
+  res.status(StatusCodes.CREATED).json({
+    success: true,
+    user,
+  });
+});
