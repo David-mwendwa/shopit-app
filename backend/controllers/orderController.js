@@ -86,9 +86,21 @@ exports.updateOrder = catchAsyncErrors(async (req, res, next) => {
     .json({ success: true, msg: 'Order Updated!', order });
 });
 
-// decrements is the num of stock on product purchase
+// decrements the num of stock onProductPurchase
 async function updateStock(id, quantity) {
   const product = await Product.findById(id);
   product.stock = product.stock - quantity;
   await product.save({ validateBeforeSave: false });
 }
+
+// Delete order => /api/v1/admin/order/:id
+exports.deleteOrder = catchAsyncErrors(async (req, res, next) => {
+  const order = await Order.findById(req.params.id);
+  if (!order) {
+    return next(
+      new ErrorHandler(`No order found with this ID`, StatusCodes.NOT_FOUND)
+    );
+  }
+  await order.remove();
+  res.status(StatusCodes.OK).json({ success: true, msg: 'Order Deleted!' });
+});
