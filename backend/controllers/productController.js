@@ -103,3 +103,9 @@ exports.createProductReview = catchAsyncErrors(async (req, res, next) => {
     .status(StatusCodes.CREATED)
     .json({ success: true, msg: 'Review Submitted', review });
 });
+
+// Get Product Reviews => /api/v1/reviews
+exports.getProductsReviews = catchAsyncErrors(async (req, res, next) => {
+  const product = await Product.findById(req.query.id);
+  res.status(StatusCodes.OK).json({ success: true, reviews: product.reviews });
+});
