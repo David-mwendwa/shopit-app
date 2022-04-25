@@ -2,12 +2,14 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { Fragment, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useAlert } from 'react-alert';
 import { getProducts } from '../actions/productActions';
 import Loader from './layout/Loader';
 import MetaData from './layout/MetaData';
 import Product from './product/Product';
 
 const Home = () => {
+  const alert = useAlert();
   const dispatch = useDispatch();
 
   const { loading, products, error, productsCount } = useSelector(
@@ -15,8 +17,11 @@ const Home = () => {
   );
 
   useEffect(() => {
+    if (error) {
+      return alert.error(error);
+    }
     dispatch(getProducts());
-  }, [dispatch]);
+  }, [dispatch, error, alert]);
 
   return (
     <Fragment>
