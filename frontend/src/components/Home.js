@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { Fragment, useEffect, useState } from 'react';
 import Pagination from 'react-js-pagination';
+import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
 import { getProducts } from '../actions/productActions';
@@ -10,6 +11,7 @@ import MetaData from './layout/MetaData';
 import Product from './product/Product';
 
 const Home = () => {
+  const { keyword } = useParams();
   const [currentPage, setCurrentPage] = useState(1);
 
   const alert = useAlert();
@@ -22,8 +24,8 @@ const Home = () => {
     if (error) {
       return alert.error(error);
     }
-    dispatch(getProducts(currentPage));
-  }, [dispatch, error, alert, currentPage]);
+    dispatch(getProducts(keyword, currentPage));
+  }, [dispatch, error, alert, currentPage, keyword]);
 
   function setCurrentPageNo(pageNumber) {
     setCurrentPage(pageNumber);

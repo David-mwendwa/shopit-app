@@ -1,5 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { Fragment } from 'react';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import Search from './Search';
 
 const Header = () => {
   return (
@@ -12,19 +14,9 @@ const Header = () => {
         </div>
 
         <div className='col-12 col-md-6 mt-2 mt-md-0'>
-          <div className='input-group'>
-            <input
-              type='text'
-              id='search_field'
-              className='form-control'
-              placeholder='Enter Product Name ...'
-            />
-            <div className='input-group-append'>
-              <button id='search_btn' className='btn'>
-                <i className='fa fa-search' aria-hidden='true'></i>
-              </button>
-            </div>
-          </div>
+          <Routes>
+            <Route path='/' element={<Search />} />
+          </Routes>
         </div>
 
         <div className='col-12 col-md-3 mt-4 mt-md-0 text-center'>
