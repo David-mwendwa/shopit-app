@@ -1,9 +1,11 @@
+import Header from './components/layout/Header';
+
 import './App.css';
 
 function App() {
   return (
     <div>
-      <h1>ShopIT</h1>
+      <Header />
     </div>
   );
 }
