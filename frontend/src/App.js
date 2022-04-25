@@ -4,6 +4,7 @@ import Footer from './components/layout/Footer';
 
 import './App.css';
 import Home from './components/Home';
+import ProductDetails from './components/product/ProductDetails';
 
 function App() {
   return (
@@ -12,7 +13,8 @@ function App() {
         <Header />
         <div className='container container-fluid'>
           <Routes>
-            <Route path='/' exact element={<Home />} />
+            <Route path='/' element={<Home />} exact />
+            <Route path='/product/:id' element={<ProductDetails />} exact />
           </Routes>
         </div>
         <Footer />
