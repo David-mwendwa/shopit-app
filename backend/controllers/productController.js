@@ -15,19 +15,21 @@ exports.newProduct = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.getProducts = catchAsyncErrors(async (req, res, next) => {
-  const resultsPerpage = 2;
+  const resultsPerpage = 8;
   const productCount = await Product.countDocuments();
   const apiFeatures = new APIFeatures(Product.find(), req.query)
     .search()
     .filter()
     .pagination(resultsPerpage);
   const products = await apiFeatures.query;
-  res.status(StatusCodes.OK).json({
-    success: true,
-    count: products.length,
-    productCount,
-    products: products,
-  });
+  setTimeout(() => {
+    res.status(StatusCodes.OK).json({
+      success: true,
+      count: products.length,
+      productCount,
+      products: products,
+    });
+  }, 500);
 });
 
 exports.getSingleProduct = catchAsyncErrors(async (req, res, next) => {
