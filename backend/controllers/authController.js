@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+const cloudinary = require('cloudinary');
 const { StatusCodes } = require('http-status-codes');
 const User = require('../models/User');
 const ErrorHandler = require('../utils/errorHandler');
@@ -8,6 +9,12 @@ const sendEmail = require('../utils/sendEmail');
 
 // Register user => /api/v1/register
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
+  const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
+    folder: 'avatars',
+    width: 150,
+    crop: 'scale',
+  });
+
   const { name, email, password } = req.body;
   if (!name || !email || !password) {
     return next(
@@ -22,8 +29,8 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
     email,
     password,
     avatar: {
-      public_id: 'kccvibpsuiusmwfepb3m',
-      url: 'https://res.cloudinary.com/shopit/image/upload/v1606305757/avatars/kccvibpsuiusmwfepb3m.png',
+      public_id: result.public_id,
+      url: result.secure_url,
     },
   });
 
@@ -209,7 +216,7 @@ exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
   }
 
   // TODO: Remove avatar from cloudinary
-  
+
   await user.remove();
   res
     .status(StatusCodes.OK)
