@@ -10,7 +10,7 @@ const sendEmail = require('../utils/sendEmail');
 // Register user => /api/v1/register
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
   const file = req.files.avatar; // pass as file.tempFilePath
-  const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
+  const result = await cloudinary.v2.uploader.upload(file.tempFilePath, {
     folder: 'avatars',
     width: 150,
     crop: 'scale',
