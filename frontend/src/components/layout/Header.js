@@ -51,7 +51,7 @@ const Header = () => {
                 data-toggle='dropdown'
                 aria-haspopup='true'
                 aria-expanded='false'>
-                <figure className='avatar avatar-nav'>
+                <figure className='avatar avatar-nav rounded-circle'>
                   <img
                     src={user.avatar && user.avatar.url}
                     alt={user && user.name}

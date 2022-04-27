@@ -11,7 +11,8 @@ import Login from './components/user/Login';
 import Register from './components/user/Register';
 import Profile from './components/user/Profile';
 
-import ProtectedRoute from './components/route/ProtectedRoute';
+//import ProtectedRoute from './components/route/ProtectedRoute';
+import Protected from './components/route/Protected';
 import { loadUser } from './actions/userActions';
 import store from './store';
 
@@ -31,7 +32,15 @@ function App() {
             <Route path='/product/:id' element={<ProductDetails />} exact />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
-            <Route path='/me' element={<Profile />} exact />
+            <Route
+              path='/me'
+              element={
+                <Protected>
+                  <Profile />
+                </Protected>
+              }
+              exact
+            />
           </Routes>
         </div>
         <Footer />

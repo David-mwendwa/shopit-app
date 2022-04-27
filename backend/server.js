@@ -13,7 +13,7 @@ process.on('uncaughtException', (err) => {
 const connectDB = require('./db/connect');
 
 // connection
-connectDB(process.env.MONGO_URI_LOCAL);
+connectDB(process.env.MONGO_URI);
 const port = process.env.PORT || 5000;
 const server = app.listen(port, () =>
   console.log(`server listening on port ${port}`)
