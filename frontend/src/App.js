@@ -11,6 +11,7 @@ import Login from './components/user/Login';
 import Register from './components/user/Register';
 import Profile from './components/user/Profile';
 import UpdateProfile from './components/user/UpdateProfile';
+import UpdatePassword from './components/user/UpdatePassword';
 
 //import ProtectedRoute from './components/route/ProtectedRoute';
 import Protected from './components/route/Protected';
@@ -48,6 +49,15 @@ function App() {
               element={
                 <Protected>
                   <UpdateProfile />
+                </Protected>
+              }
+              exact
+            />
+            <Route
+              path='/password/update'
+              element={
+                <Protected>
+                  <UpdatePassword />
                 </Protected>
               }
               exact

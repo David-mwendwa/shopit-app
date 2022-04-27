@@ -151,7 +151,7 @@ exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
   if (!isMatched) {
     return next(new ErrorHandler('old password is incorrect'));
   }
-  user.password = req.body.password;
+  user.password = req.body.newPassword;
   await user.save();
   sendToken(user, StatusCodes.OK, res);
 });
