@@ -61,7 +61,6 @@ const Header = () => {
                 <span>{user && user.name}</span>
               </Link>
               <div className='dropdown-menu' aria-label='dropDownMenuButton'>
-                \
                 {user && user.role !== 'admin' ? (
                   <Link className='dropdown-item' to='/orders/me'>
                     Orders
@@ -74,7 +73,10 @@ const Header = () => {
                 <Link className='dropdown-item' to='/me'>
                   Profile
                 </Link>
-                <Link className='dropdown-item text-danger' to='/'>
+                <Link
+                  className='dropdown-item text-danger'
+                  to='/'
+                  onClick={logoutHandler}>
                   Logout
                 </Link>
               </div>
