@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 const Protected = ({ children }) => {
   const { isAuthenticated, loading, user } = useSelector((state) => state.auth);
 
-  if (!isAuthenticated) {
+  if (!loading && !isAuthenticated) {
     return <Navigate to='/login' replace />;
   }
   return children;
