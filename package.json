@@ -4,7 +4,7 @@
   "description": "e-commerce mern application",
   "main": "server.js",
   "scripts": {
-    "server": "nodemon backend/server --ignore frontend",
+    "server": "nodemon backend/server.js --ignore frontend",
     "client": "npm start --prefix frontend",
     "start": "concurrently --kill-others-on-fail \" npm run server\" \" npm run client\"",
     "dev": "SET NODE_ENV=DEVELOPMENT & nodemon backend/server",

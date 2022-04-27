@@ -12,7 +12,6 @@ import {
   LOGOUT_FAIL,
   CLEAR_ERRORS,
 } from '../constants/userConstants';
-
 export const authReducer = (state = { user: {} }, action) => {
   switch (action.type) {
     case LOGIN_REQUEST:
@@ -22,6 +21,7 @@ export const authReducer = (state = { user: {} }, action) => {
         loading: true,
         isAuthenticated: false,
       };
+
     case LOGIN_SUCCESS:
     case REGISTER_USER_SUCCESS:
     case LOAD_USER_SUCCESS:
@@ -31,6 +31,28 @@ export const authReducer = (state = { user: {} }, action) => {
         isAuthenticated: true,
         user: action.payload,
       };
+
+    case LOGOUT_SUCCESS:
+      return {
+        loading: false,
+        isAuthenticated: false,
+        user: null,
+      };
+
+    case LOAD_USER_FAIL:
+      return {
+        loading: false,
+        isAuthenticated: false,
+        user: null,
+        error: action.payload,
+      };
+
+    case LOGOUT_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+      };
+
     case LOGIN_FAIL:
     case REGISTER_USER_FAIL:
       return {
@@ -40,29 +62,13 @@ export const authReducer = (state = { user: {} }, action) => {
         user: null,
         error: action.payload,
       };
-    case LOAD_USER_FAIL:
-      return {
-        loading: false,
-        isAuthenticated: false,
-        user: null,
-        error: action.payload,
-      };
-    case LOGOUT_SUCCESS:
-      return {
-        loading: false,
-        isAuthenticated: false,
-        user: null,
-      };
-    case LOGOUT_FAIL:
-      return {
-        ...state,
-        error: action.payload,
-      };
+
     case CLEAR_ERRORS:
       return {
         ...state,
         error: null,
       };
+
     default:
       return state;
   }
