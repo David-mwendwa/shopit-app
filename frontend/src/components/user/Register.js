@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { Fragment, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import MetaData from '../layout/MetaData';
 import { useAlert } from 'react-alert';
 import { useDispatch, useSelector } from 'react-redux';
@@ -33,6 +33,7 @@ const Register = () => {
       navigate('/');
     }
     if (error) {
+      console.log(error);
       alert.error(error);
       dispatch(clearErrors());
     }
@@ -41,20 +42,26 @@ const Register = () => {
   const submitHandler = (e) => {
     e.preventDefault();
 
-    const formData = new FormData();
-    formData.set('name', name);
-    formData.set('email', email);
-    formData.set('password', password);
-    formData.set('avatar', avatar);
+    let formData = new FormData();
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('password', password);
+    formData.append('avatar', avatar);
 
-    console.log(name, email, password);
+    let userData = {
+      name: formData.get('name'),
+      email: formData.get('email'),
+      password: formData.get('password'),
+      avatar: formData.get('avatar'),
+    };
 
-    dispatch(register(formData));
+    dispatch(register(userData));
   };
 
   const onChange = (e) => {
     if (e.target.name === 'avatar') {
       const reader = new FileReader();
+      console.log('reader', reader);
       reader.onload = () => {
         if (reader.readyState === 2) {
           setAvatarPreview(reader.result);

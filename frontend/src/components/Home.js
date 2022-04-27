@@ -19,6 +19,7 @@ import Product from './product/Product';
 const Home = () => {
   const { keyword } = useParams();
   const [currentPage, setCurrentPage] = useState(1);
+  // eslint-disable-next-line no-unused-vars
   const [price, setPrice] = useState([1, 1000]);
   const [category, setCategory] = useState('');
   const [rating, setRating] = useState(0);

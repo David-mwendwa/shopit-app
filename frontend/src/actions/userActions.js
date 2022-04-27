@@ -43,7 +43,9 @@ export const register = (userData) => async (dispatch) => {
         'Content-Type': 'multipart/form-data',
       },
     };
+    // TODO: request not going through - has proxy issues
     const { data } = await axios.post(`/api/v1/register`, userData, config);
+    console.log('user data res', data);
     dispatch({ type: REGISTER_USER_SUCCESS, payload: data.user });
   } catch (error) {
     dispatch({

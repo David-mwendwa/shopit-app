@@ -45,15 +45,15 @@ module.exports = (err, req, res, next) => {
       error = new ErrorHandler(message, StatusCodes.BAD_REQUEST);
     }
 
-    res.status(404).json({
-      success: false,
-      message: error.message || 'Internal Server Error',
-    });
-    // res.status(500).json({
+    // res.status(404).json({
     //   success: false,
-    //   error: error,
-    //   errMessage: error.message,
-    //   stack: error.stack,
+    //   message: error.message || 'Internal Server Error',
     // });
+    res.status(500).json({
+      success: false,
+      error: error,
+      errMessage: error.message,
+      stack: error.stack,
+    });
   }
 };

@@ -4,7 +4,9 @@
   "description": "e-commerce mern application",
   "main": "server.js",
   "scripts": {
-    "start": "node backend/server",
+    "server": "nodemon backend/server --ignore frontend",
+    "client": "npm start --prefix frontend",
+    "start": "concurrently --kill-others-on-fail \" npm run server\" \" npm run client\"",
     "dev": "SET NODE_ENV=DEVELOPMENT & nodemon backend/server",
     "prod": "SET NODE_ENV=PRODUCTION & nodemon backend/server",
     "seeder": "node backend/utils/seeder.js"
@@ -15,6 +17,7 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.0",
     "cloudinary": "^1.29.1",
+    "concurrently": "^7.1.0",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
@@ -25,5 +28,8 @@
     "mongoose": "^6.3.0",
     "nodemailer": "^6.7.3",
     "validator": "^13.7.0"
+  },
+  "engines": {
+    "node": "16.x"
   }
 }
