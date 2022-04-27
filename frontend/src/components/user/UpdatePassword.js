@@ -48,6 +48,7 @@ const UpdatePassword = () => {
 
     dispatch(updatePassword(passwords));
   };
+  
   return (
     <Fragment>
       <MetaData title={'Update Password'} />
