@@ -1,6 +1,6 @@
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const fileUpload = require('express-fileupload')
+const fileUpload = require('express-fileupload');
 const cloudinary = require('cloudinary');
 const express = require('express');
 const app = express();

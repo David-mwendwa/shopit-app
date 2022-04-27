@@ -90,10 +90,10 @@ export const updateProfile = (userData) => async (dispatch) => {
         'Content-Type': 'multipart/form-data',
       },
     };
-    // TODO: request not going through - has proxy issues
+    //TODO: avatar value prevents this request from going through
     const { data } = await axios.patch(`/api/v1/me/update`, userData, config);
-    console.log('user data res', data);
-    dispatch({ type: UPDATE_PASSWORD_SUCCESS, payload: data.success });
+    console.log('data', data);
+    dispatch({ type: UPDATE_PROFILE_SUCCESS, payload: data.success });
   } catch (error) {
     dispatch({
       type: UPDATE_PROFILE_FAIL,
