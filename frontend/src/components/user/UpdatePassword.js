@@ -4,11 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import MetaData from '../layout/MetaData';
 import { useAlert } from 'react-alert';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  updatePassword,
-  loadUser,
-  clearErrors,
-} from '../../actions/userActions';
+import { updatePassword, clearErrors } from '../../actions/userActions';
 import { UPDATE_PASSWORD_RESET } from '../../constants/userConstants';
 
 const UpdatePassword = () => {
@@ -48,7 +44,7 @@ const UpdatePassword = () => {
 
     dispatch(updatePassword(passwords));
   };
-  
+
   return (
     <Fragment>
       <MetaData title={'Update Password'} />

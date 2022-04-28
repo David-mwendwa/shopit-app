@@ -13,6 +13,7 @@ import Profile from './components/user/Profile';
 import UpdateProfile from './components/user/UpdateProfile';
 import UpdatePassword from './components/user/UpdatePassword';
 import ForgotPassword from './components/user/ForgotPassword';
+import ResetPassword from './components/user/ResetPassword';
 
 //import ProtectedRoute from './components/route/ProtectedRoute';
 import Protected from './components/route/Protected';
@@ -37,6 +38,11 @@ function App() {
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
             <Route path='/password/forgot' element={<ForgotPassword />} exact />
+            <Route
+              path='/password/reset/:token'
+              element={<ResetPassword />}
+              exact
+            />
             <Route
               path='/me'
               element={

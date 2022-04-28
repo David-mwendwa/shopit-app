@@ -34,6 +34,7 @@ const ForgotPassword = () => {
     console.log('email', formData.get('email'));
     dispatch(forgotPassword(formData.get('email')));
   };
+
   return (
     <Fragment>
       <MetaData title={'Forgot Password'} />
