@@ -43,7 +43,7 @@ const ProductDetails = () => {
 
   const addToCart = () => {
     dispatch(addItemToCart(id, quantity));
-    alert.success('item added to cart');
+    alert.success('item added to cart')
   };
 
   return (
