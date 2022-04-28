@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import { useAlert } from 'react-alert';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProductDetails, clearErrors } from '../../actions/productActions';
+import { addItemToCart } from '../../actions/cartActions';
 
 const ProductDetails = () => {
   const [quantity, setQuantity] = useState(1);
@@ -38,6 +39,11 @@ const ProductDetails = () => {
     if (count.valueAsNumber <= 1) return;
     const qty = count.valueAsNumber - 1;
     setQuantity(qty);
+  };
+
+  const addToCart = () => {
+    dispatch(addItemToCart(id, quantity));
+    alert.success('item added to cart');
   };
 
   return (
@@ -100,7 +106,9 @@ const ProductDetails = () => {
               <button
                 type='button'
                 id='cart_btn'
-                className='btn btn-primary d-inline ml-4'>
+                className='btn btn-primary d-inline ml-4'
+                onClick={addToCart}
+                disabled={product.stock === 0}>
                 Add to Cart
               </button>
               <hr />
