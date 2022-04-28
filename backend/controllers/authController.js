@@ -6,15 +6,12 @@ const ErrorHandler = require('../utils/errorHandler');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const sendToken = require('../utils/jwt');
 const sendEmail = require('../utils/sendEmail');
+const { upload } = require('../utils/cloudinary');
 
 // Register user => /api/v1/register
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
-  const file = req.files.avatar; // pass as file.tempFilePath
-  const result = await cloudinary.v2.uploader.upload(file.tempFilePath, {
-    folder: 'avatars',
-    width: 150,
-    crop: 'scale',
-  });
+  // upload image on cloudinary
+  let result = await upload(req, res);
 
   const { name, email, password } = req.body;
   if (!name || !email || !password) {

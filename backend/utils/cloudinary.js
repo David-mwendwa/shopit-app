@@ -6,22 +6,19 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_SECRET,
 });
 
+// import and parse req object as param
 exports.upload = async (req, res) => {
-  const file = req.files.image || req.files.avatar;
-
   try {
-    console.log(file);
-    const result = await cloudinary.uploader.upload(file.tempFilePath, {
-      public_id: `${Date.now()}`,
-      resource_type: 'auto',
-    });
-
-    res.json({
-      public_id: result.public_id,
-      url: result.secure_url,
-    });
-  } catch (err) {
-    console.log('Error', err);
-    return res.status(400).json({ error: err });
+    let file = req.files?.avatar || req.files?.image || req.files?.images;
+    if (file) {
+      return await cloudinary.v2.uploader.upload(file.tempFilePath, {
+        folder: 'avatars', // cloudinary folder where you want to save the images
+        // width: 300, // width of an image
+        // crop: 'scale',
+        resource_type: 'auto',
+      });
+    }
+  } catch (error) {
+    console.log(error);
   }
 };
