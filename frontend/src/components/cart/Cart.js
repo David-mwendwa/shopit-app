@@ -5,7 +5,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useAlert } from 'react-alert';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProductDetails, clearErrors } from '../../actions/productActions';
-import { addItemToCart } from '../../actions/cartActions';
+import { addItemToCart, removeItemFromCart } from '../../actions/cartActions';
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -21,6 +21,10 @@ const Cart = () => {
     const newQty = quantity - 1;
     if (newQty <= 0) return;
     dispatch(addItemToCart(id, newQty));
+  };
+
+  const removeCartItemHandler = (id) => {
+    dispatch(removeItemFromCart(id));
   };
 
   return (
@@ -39,7 +43,7 @@ const Cart = () => {
               {cartItems.map((item) => (
                 <Fragment>
                   <hr />
-                  <div className='cart-item'>
+                  <div className='cart-item' key={item.product}>
                     <div className='row'>
                       <div className='col-4 col-lg-3'>
                         <img
@@ -79,11 +83,7 @@ const Cart = () => {
                           <span
                             className='btn btn-primary plus'
                             onClick={() =>
-                              increaseQty(
-                                item.product,
-                                item.quantity,
-                                item.stock
-                              )
+                              increaseQty(item.product, item.quantity)
                             }>
                             +
                           </span>
@@ -93,7 +93,10 @@ const Cart = () => {
                       <div className='col-4 col-lg-1 mt-4 mt-lg-0'>
                         <i
                           id='delete_cart_item'
-                          className='fa fa-trash btn btn-danger'></i>
+                          className='fa fa-trash btn btn-danger'
+                          onClick={() =>
+                            removeCartItemHandler(item.product)
+                          }></i>
                       </div>
                     </div>
                   </div>
