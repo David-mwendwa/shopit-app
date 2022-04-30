@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
@@ -22,11 +22,19 @@ import ConfirmOrder from './components/cart/ConfirmOrder';
 import Protected from './components/route/Protected';
 import { loadUser } from './actions/userActions';
 import store from './store';
+import axios from 'axios';
 
 function App() {
+  const [stripeApiKey, setStripeApiKey] = useState('');
+
   useEffect(() => {
-    // this causes unintented logout on load
     store.dispatch(loadUser());
+
+    async function getStripeApiKey() {
+      const { data } = await axios.get('/api/v1/stripeapi');
+      setStripeApiKey(data.stripeApiKey);
+    }
+    getStripeApiKey();
   }, []);
 
   return (
