@@ -1,5 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
-import { countries } from 'countries-list';
+import React, { Fragment } from 'react';
 import MetaData from '../layout/MetaData';
 import CheckoutSteps from './CheckoutSteps';
 import { useNavigate, Link } from 'react-router-dom';
