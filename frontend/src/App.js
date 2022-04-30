@@ -19,6 +19,7 @@ import Cart from './components/cart/Cart';
 import Shipping from './components/cart/Shipping';
 import ConfirmOrder from './components/cart/ConfirmOrder';
 import Payment from './components/cart/Payment';
+import OrderSuccess from './components/cart/OrderSuccess';
 
 import Protected from './components/route/Protected';
 import { loadUser } from './actions/userActions';
@@ -81,6 +82,14 @@ function App() {
                 }
               />
             )}
+            <Route
+              path='/success'
+              element={
+                <Protected>
+                  <OrderSuccess />
+                </Protected>
+              }
+            />
 
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
