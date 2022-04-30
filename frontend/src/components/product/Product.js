@@ -2,17 +2,15 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { cartImage2 } from '../cart/CartImage';
 
 const Product = ({ product, col }) => {
   return (
     <div className={`col-sm-12 col-md-6 col-lg-${col} my-3`}>
-      <div className='card p-3 rounded'>
+      <div className='card p-2 rounded'>
         <img
           className='card-img-top mx-auto'
-          src={
-            (product.images && product.images[0] && product.images[0].url) ||
-            'https://m.media-amazon.com/images/I/617NtexaW2L._AC_UY218_.jpg'
-          }
+          src={(product.images && product.images[0]?.url) || cartImage2}
         />
         <div className='card-body d-flex flex-column'>
           <h5 className='card-title'>

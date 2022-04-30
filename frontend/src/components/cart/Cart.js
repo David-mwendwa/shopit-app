@@ -3,6 +3,7 @@ import MetaData from '../layout/MetaData';
 import { useNavigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItemToCart, removeItemFromCart } from '../../actions/cartActions';
+import { cartImage2 } from './CartImage';
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -43,13 +44,13 @@ const Cart = () => {
           <div className='row d-flex justify-content-between'>
             <div className='col-12 col-lg-8'>
               {cartItems.map((item) => (
-                <Fragment>
+                <Fragment key={item.product}>
                   <hr />
                   <div className='cart-item' key={item.product}>
                     <div className='row'>
                       <div className='col-4 col-lg-3'>
                         <img
-                          src={item.image || `./images/airpords.jpg`}
+                          src={item.image || cartImage2}
                           alt='Laptop'
                           height='90'
                           width='115'

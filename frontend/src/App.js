@@ -17,8 +17,8 @@ import ResetPassword from './components/user/ResetPassword';
 
 import Cart from './components/cart/Cart';
 import Shipping from './components/cart/Shipping';
+import ConfirmOrder from './components/cart/ConfirmOrder';
 
-//import ProtectedRoute from './components/route/ProtectedRoute';
 import Protected from './components/route/Protected';
 import { loadUser } from './actions/userActions';
 import store from './store';
@@ -45,6 +45,14 @@ function App() {
               element={
                 <Protected>
                   <Shipping />
+                </Protected>
+              }
+            />
+            <Route
+              path='/order/confirm'
+              element={
+                <Protected>
+                  <ConfirmOrder />
                 </Protected>
               }
             />

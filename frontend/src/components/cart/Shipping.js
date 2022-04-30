@@ -21,7 +21,7 @@ const Shipping = () => {
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(saveShippingInfo({ address, city, postalCode, phoneNo, country }));
-    navigate('/confirm');
+    navigate('/order/confirm');
   };
 
   return (
@@ -57,7 +57,7 @@ const Shipping = () => {
             </div>
 
             <div className='form-group'>
-              <label htmlhtmlFor='phone_field'>Phone No</label>
+              <label htmlFor='phone_field'>Phone No</label>
               <input
                 type='phone'
                 id='phone_field'
