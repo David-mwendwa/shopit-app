@@ -16,6 +16,7 @@ import ForgotPassword from './components/user/ForgotPassword';
 import ResetPassword from './components/user/ResetPassword';
 
 import Cart from './components/cart/Cart';
+import Shipping from './components/cart/Shipping';
 
 //import ProtectedRoute from './components/route/ProtectedRoute';
 import Protected from './components/route/Protected';
@@ -37,7 +38,17 @@ function App() {
             <Route path='/' element={<Home />} exact />
             <Route path='/search/:keyword' element={<Home />} />
             <Route path='/product/:id' element={<ProductDetails />} exact />
+
             <Route path='/cart' element={<Cart />} />
+            <Route
+              path='/shipping'
+              element={
+                <Protected>
+                  <Shipping />
+                </Protected>
+              }
+            />
+
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
             <Route path='/password/forgot' element={<ForgotPassword />} exact />
