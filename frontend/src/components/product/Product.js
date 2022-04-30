@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { cartImage2 } from '../cart/CartImage';
+import { cartImage } from '../cart/CartImage';
 
 const Product = ({ product, col }) => {
   return (
@@ -10,7 +10,7 @@ const Product = ({ product, col }) => {
       <div className='card p-2 rounded'>
         <img
           className='card-img-top mx-auto'
-          src={(product.images && product.images[0]?.url) || cartImage2}
+          src={(product.images && product.images[0]?.url) || cartImage}
         />
         <div className='card-body d-flex flex-column p-3'>
           <h5 className='card-title'>
