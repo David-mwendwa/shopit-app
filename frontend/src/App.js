@@ -21,6 +21,8 @@ import ConfirmOrder from './components/cart/ConfirmOrder';
 import Payment from './components/cart/Payment';
 import OrderSuccess from './components/cart/OrderSuccess';
 
+import ListOrders from './components/order/ListOrders';
+
 import Protected from './components/route/Protected';
 import { loadUser } from './actions/userActions';
 import store from './store';
@@ -122,6 +124,16 @@ function App() {
               element={
                 <Protected>
                   <UpdatePassword />
+                </Protected>
+              }
+              exact
+            />
+
+            <Route
+              path='/order/me'
+              element={
+                <Protected>
+                  <ListOrders />
                 </Protected>
               }
               exact
