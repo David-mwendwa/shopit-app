@@ -130,7 +130,7 @@ function App() {
             />
 
             <Route
-              path='/order/me'
+              path='/orders/me'
               element={
                 <Protected>
                   <ListOrders />

@@ -23,9 +23,30 @@ module.exports = (err, req, res, next) => {
 
     // handle mongoose validation error
     if (err.name === 'ValidationError') {
-      const message = Object.values(err.values).map((value) => value.message);
+      let message = Object.keys(err.errors).map(
+        (key) => err.errors[key].message
+      );
+      let regex = /`(\w+)`/g;
+      let fields = [];
+      let match = regex.exec(message);
+      while (match !== null) {
+        fields.push(match[1]);
+        match = regex.exec(message);
+      }
+      message =
+        (fields.length &&
+          `${fields.join(', ')} ${
+            fields.length > 1 ? 'fields are' : 'field is'
+          } required`) ||
+        message;
       error = new ErrorHandler(message, StatusCodes.BAD_REQUEST);
     }
+    // if (err.name === 'ValidationError') {
+    //   let message = Object.values(err.errors)
+    //     .map((item) => item.message)
+    //     .join(', ');
+    //   error = new ErrorHandler(message, StatusCodes.BAD_REQUEST);
+    // }
 
     // handle mongoose duplicate key errors
     if (err.code === 11000) {
