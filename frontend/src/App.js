@@ -22,6 +22,7 @@ import Payment from './components/cart/Payment';
 import OrderSuccess from './components/cart/OrderSuccess';
 
 import ListOrders from './components/order/ListOrders';
+import OrderDetails from './components/order/OrderDetails';
 
 import Protected from './components/route/Protected';
 import { loadUser } from './actions/userActions';
@@ -134,6 +135,15 @@ function App() {
               element={
                 <Protected>
                   <ListOrders />
+                </Protected>
+              }
+              exact
+            />
+            <Route
+              path='/order/:id'
+              element={
+                <Protected>
+                  <OrderDetails />
                 </Protected>
               }
               exact
