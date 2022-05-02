@@ -13,8 +13,7 @@ const OrderDetails = () => {
   const { id } = useParams();
 
   const orderDetails = useSelector((state) => state.orderDetails);
-  console.log({ orderDetails });
-  const { loading, error, order } = orderDetails;
+  const { loading, error, order = {} } = orderDetails;
   const {
     shippingInfo,
     orderItems,
@@ -26,8 +25,6 @@ const OrderDetails = () => {
 
   useEffect(() => {
     dispatch(getOrderDetails(id));
-    console.log({id});
-    console.log('dispatch', dispatch(getOrderDetails(id)));
 
     if (error) {
       alert.error(error);
@@ -58,7 +55,7 @@ const OrderDetails = () => {
                 <b>Name:</b> {user && user.name}
               </p>
               <p>
-                <b>Phone:</b> {shippingInfo.phoneNo}
+                <b>Phone:</b> {shippingInfo && shippingInfo.phoneNo}
               </p>
               <p className='mb-4'>
                 <b>Address:</b> {shippingDetails}

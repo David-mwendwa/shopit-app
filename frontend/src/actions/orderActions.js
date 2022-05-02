@@ -45,12 +45,13 @@ export const myOrders = () => async (dispatch) => {
 };
 
 export const getOrderDetails = (id) => async (dispatch) => {
-  console.log({ id });
-  dispatch({ type: ORDER_DETAILS_REQUEST });
   try {
+    dispatch({ type: ORDER_DETAILS_REQUEST });
     const { data } = await axios.get(`/api/v1/order/${id}`);
-    console.log({ order: data.order });
-    dispatch({ type: ORDER_DETAILS_SUCCESS, payload: data.order });
+    dispatch({
+      type: ORDER_DETAILS_SUCCESS,
+      payload: data.order,
+    });
   } catch (error) {
     dispatch({
       type: ORDER_DETAILS_FAIL,
