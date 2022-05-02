@@ -7,7 +7,7 @@ const ListReviews = ({ reviews }) => {
       <hr />
       {reviews &&
         reviews.map((review) => (
-          <div className='review-card my-3'>
+          <div className='review-card my-3' key={review._id}>
             <div className='rating-outer'>
               <div
                 className='rating-inner'
