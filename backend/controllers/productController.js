@@ -86,6 +86,35 @@ exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler('product not found', StatusCodes.NOT_FOUND));
   }
 
+  let images = [];
+  if (typeof req.body.images === 'string') {
+    images.push(req.body.images);
+  } else {
+    images = req.body.images;
+  }
+
+  if (images !== undefined) {
+    // Deleting images associated with the product
+    for (let i = 0; i < product.images.length; i++) {
+      const result = await cloudinary.v2.uploader.destroy(
+        product.images[i].public_id
+      );
+
+      let imagesLinks = [];
+
+      for (let i = 0; i < images.length; i++) {
+        const result = await cloudinary.v2.uploader.upload(images[i], {
+          folder: 'products',
+        });
+        imagesLinks.push({
+          public_id: result.public_id,
+          url: result.secure_url,
+        });
+      }
+      req.body.images = imagesLinks;
+    }
+  }
+
   product = await Product.findByIdAndUpdate(productId, req.body, {
     new: true,
     runValidators: true,
