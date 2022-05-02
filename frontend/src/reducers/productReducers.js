@@ -100,6 +100,7 @@ export const newReviewReducer = (state = {}, action) => {
     case NEW_REVIEW_FAIL:
       return {
         ...state,
+        loading: false,
         error: action.payload,
       };
     case NEW_REVIEW_RESET:
@@ -134,6 +135,7 @@ export const newProductReducer = (state = { product: {} }, action) => {
     case NEW_PRODUCT_FAIL:
       return {
         ...state,
+        loading: false,
         error: action.payload,
       };
     case NEW_PRODUCT_RESET:

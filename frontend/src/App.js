@@ -18,6 +18,8 @@ import ResetPassword from './components/user/ResetPassword';
 
 // Admin Imports
 import Dashboard from './components/admin/Dashboard';
+import ProductsList from './components/admin/ProductsList';
+import NewProduct from './components/admin/NewProduct';
 
 // Cart Imports
 import Cart from './components/cart/Cart';
@@ -29,9 +31,9 @@ import OrderSuccess from './components/cart/OrderSuccess';
 // Order Imports
 import ListOrders from './components/order/ListOrders';
 import OrderDetails from './components/order/OrderDetails';
-import ProductsList from './components/admin/ProductsList';
 
 import Protected from './components/route/Protected';
+import { useSelector } from 'react-redux';
 import { loadUser } from './actions/userActions';
 import store from './store';
 import axios from 'axios';
@@ -42,6 +44,8 @@ import { loadStripe } from '@stripe/stripe-js';
 
 function App() {
   const [stripeApiKey, setStripeApiKey] = useState('');
+
+  const { user, loading } = useSelector((state) => state.auth);
 
   useEffect(() => {
     store.dispatch(loadUser());
@@ -177,8 +181,17 @@ function App() {
             }
             exact
           />
+          <Route
+            path='/admin/product'
+            element={
+              <Protected>
+                <NewProduct isAdmin={true} />
+              </Protected>
+            }
+            exact
+          />
         </Routes>
-        <Footer />
+        {!loading && user.role !== 'admin' && <Footer />}
       </div>
     </Router>
   );

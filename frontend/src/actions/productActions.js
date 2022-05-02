@@ -41,22 +41,22 @@ export const getProducts =
 
 export const newProduct = (productData) => async (dispatch) => {
   try {
-    dispatch({ type: NEW_REVIEW_REQUEST });
+    dispatch({ type: NEW_PRODUCT_REQUEST });
     const config = {
       headers: {
         'Content-Type': 'application/json',
       },
     };
     const { data } = await axios.post(
-      `/api/v1/product/new`,
+      `/api/v1/admin/product/new`,
       productData,
       config
     );
     console.log({ productDataRes: data });
-    dispatch({ type: NEW_REVIEW_SUCCESS, payload: data });
+    dispatch({ type: NEW_PRODUCT_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
-      type: NEW_REVIEW_FAIL,
+      type: NEW_PRODUCT_FAIL,
       payload: error.response.data.message,
     });
   }
