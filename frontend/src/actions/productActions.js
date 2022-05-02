@@ -6,6 +6,10 @@ import {
   ALL_PRODUCTS_REQUEST,
   ALL_PRODUCTS_SUCCESS,
   ALL_PRODUCTS_FAIL,
+  NEW_PRODUCT_REQUEST,
+  NEW_PRODUCT_SUCCESS,
+  NEW_PRODUCT_RESET,
+  NEW_PRODUCT_FAIL,
   PRODUCT_DETAILS_REQUEST,
   PRODUCT_DETAILS_SUCCESS,
   PRODUCT_DETAILS_FAIL,
@@ -34,6 +38,29 @@ export const getProducts =
       });
     }
   };
+
+export const newProduct = (productData) => async (dispatch) => {
+  try {
+    dispatch({ type: NEW_REVIEW_REQUEST });
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    const { data } = await axios.post(
+      `/api/v1/product/new`,
+      productData,
+      config
+    );
+    console.log({ productDataRes: data });
+    dispatch({ type: NEW_REVIEW_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: NEW_REVIEW_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
 
 export const getProductDetails = (id) => async (dispatch) => {
   try {
