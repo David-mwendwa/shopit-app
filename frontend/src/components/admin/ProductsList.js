@@ -4,14 +4,24 @@ import { MDBDataTable } from 'mdbreact';
 import Loader from '../layout/Loader';
 import Sidebar from './Sidebar';
 import { useAlert } from 'react-alert';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAdminProducts, clearErrors } from '../../actions/productActions';
+import {
+  getAdminProducts,
+  clearErrors,
+  deleteProduct,
+} from '../../actions/productActions';
+import { DELETE_PRODUCT_RESET } from '../../constants/productConstants';
 
 const ProductsList = () => {
+  const navigate = useNavigate();
   const alert = useAlert();
   const dispatch = useDispatch();
+
   const { loading, error, products } = useSelector((state) => state.products);
+  const { error: deleteError, isDeleted } = useSelector(
+    (state) => state.product
+  );
 
   useEffect(() => {
     dispatch(getAdminProducts());
@@ -20,7 +30,16 @@ const ProductsList = () => {
       alert.error(error);
       dispatch(clearErrors());
     }
-  }, [alert, dispatch, error]);
+    if (deleteError) {
+      alert.error(deleteError);
+      dispatch(clearErrors());
+    }
+    if (isDeleted) {
+      alert.success('Product deleted');
+      navigate('/admin/products');
+      dispatch({ type: DELETE_PRODUCT_RESET });
+    }
+  }, [alert, dispatch, error, deleteError, isDeleted, navigate]);
 
   const setProducts = () => {
     const data = {
@@ -47,7 +66,9 @@ const ProductsList = () => {
               className='btn btn-primary py-1 px-2'>
               <i className='fa fa-pencil'></i>
             </Link>
-            <button className='btn btn-danger py-1 px-2 ml-2'>
+            <button
+              className='btn btn-danger py-1 px-2 ml-2'
+              onClick={() => deleteProductHandler(product._id)}>
               <i className='fa fa-trash'></i>
             </button>
           </Fragment>
@@ -56,6 +77,10 @@ const ProductsList = () => {
     });
 
     return data;
+  };
+
+  const deleteProductHandler = (id) => {
+    dispatch(deleteProduct(id));
   };
 
   return (
