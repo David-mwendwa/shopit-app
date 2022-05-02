@@ -7,6 +7,7 @@ import './App.css';
 import Home from './components/Home';
 import ProductDetails from './components/product/ProductDetails';
 
+// Auth or User Imports
 import Login from './components/user/Login';
 import Register from './components/user/Register';
 import Profile from './components/user/Profile';
@@ -15,12 +16,17 @@ import UpdatePassword from './components/user/UpdatePassword';
 import ForgotPassword from './components/user/ForgotPassword';
 import ResetPassword from './components/user/ResetPassword';
 
+// Admin Imports
+import Dashboard from './components/admin/Dashboard';
+
+// Cart Imports
 import Cart from './components/cart/Cart';
 import Shipping from './components/cart/Shipping';
 import ConfirmOrder from './components/cart/ConfirmOrder';
 import Payment from './components/cart/Payment';
 import OrderSuccess from './components/cart/OrderSuccess';
 
+// Order Imports
 import ListOrders from './components/order/ListOrders';
 import OrderDetails from './components/order/OrderDetails';
 
@@ -150,6 +156,18 @@ function App() {
             />
           </Routes>
         </div>
+        
+        <Routes>
+          <Route
+            path='/dashboard'
+            element={
+              <Protected>
+                <Dashboard isAdmin={true} />
+              </Protected>
+            }
+            exact
+          />
+        </Routes>
         <Footer />
       </div>
     </Router>
