@@ -22,7 +22,7 @@ const Register = () => {
 
   const alert = useAlert();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const { isAuthenticated, error, loading } = useSelector(
     (state) => state.auth
@@ -32,6 +32,7 @@ const Register = () => {
     if (isAuthenticated) {
       navigate('/');
     }
+
     if (error) {
       alert.error(error);
       dispatch(clearErrors());
@@ -41,32 +42,26 @@ const Register = () => {
   const submitHandler = (e) => {
     e.preventDefault();
 
-    let formData = new FormData();
-    formData.append('name', name);
-    formData.append('email', email);
-    formData.append('password', password);
-    formData.append('avatar', avatar);
+    const formData = new FormData();
+    formData.set('name', name);
+    formData.set('email', email);
+    formData.set('password', password);
+    formData.set('avatar', avatar);
 
-    let userData = {
-      name: formData.get('name'),
-      email: formData.get('email'),
-      password: formData.get('password'),
-      avatar: formData.get('avatar'),
-    };
-
-    dispatch(register(userData));
+    dispatch(register(formData));
   };
 
   const onChange = (e) => {
     if (e.target.name === 'avatar') {
       const reader = new FileReader();
-      console.log('reader', reader);
+
       reader.onload = () => {
         if (reader.readyState === 2) {
           setAvatarPreview(reader.result);
           setAvatar(reader.result);
         }
       };
+
       reader.readAsDataURL(e.target.files[0]);
     } else {
       setUser({ ...user, [e.target.name]: e.target.value });

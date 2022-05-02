@@ -11,17 +11,18 @@ const { upload } = require('../utils/cloudinary');
 // Register user => /api/v1/register
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
   // upload image on cloudinary
-  let result = await upload(req, res);
-
+  let options = {
+    folder: 'avatars',
+    width: 150,
+    crop: 'scale',
+  };
+  let result = await upload(req, options);
+  // const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
+  //   folder: 'avatars',
+  //   width: 150,
+  //   crop: 'scale',
+  // });
   const { name, email, password } = req.body;
-  if (!name || !email || !password) {
-    return next(
-      new ErrorHandler(
-        'Please provide name, email and password',
-        StatusCodes.BAD_REQUEST
-      )
-    );
-  }
   const user = await User.create({
     name,
     email,
@@ -31,6 +32,8 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
       url: result.secure_url,
     },
   });
+
+  //console.log({ user });
 
   const token = user.getJwtToken();
   res.status(StatusCodes.CREATED).json({

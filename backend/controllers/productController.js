@@ -25,7 +25,7 @@ exports.newProduct = catchAsyncErrors(async (req, res, next) => {
       url: result.secure_url,
     });
   }
-  req.body.images = imagesLinks
+  req.body.images = imagesLinks;
 
   req.body.user = req.user.id;
   const product = await Product.create(req.body);
@@ -36,7 +36,7 @@ exports.newProduct = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.getProducts = catchAsyncErrors(async (req, res, next) => {
-  const resultsPerPage = 2;
+  const resultsPerPage = 8;
   const productCount = await Product.countDocuments();
 
   // get filtered products count

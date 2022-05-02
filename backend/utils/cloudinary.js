@@ -7,15 +7,13 @@ cloudinary.config({
 });
 
 // import and parse req object as param
-exports.upload = async (req, res) => {
+exports.upload = async (req, options) => {
   try {
-    let file = req.files?.avatar || req.files?.image || req.files?.images;
+    let file = req.body?.avatar || req.body?.image || req.body?.images;
     if (file) {
-      return await cloudinary.v2.uploader.upload(file.tempFilePath, {
-        folder: 'avatars', // cloudinary folder where you want to save the images
-        // width: 300, // width of an image
-        // crop: 'scale',
+      return await cloudinary.v2.uploader.upload(file, {
         resource_type: 'auto',
+        ...options,
       });
     }
   } catch (error) {
