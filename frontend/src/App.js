@@ -51,8 +51,12 @@ function App() {
     store.dispatch(loadUser());
 
     async function getStripeApiKey() {
-      const { data } = await axios.get('/api/v1/stripeapi');
-      setStripeApiKey(data.stripeApiKey);
+      try {
+        const { data } = await axios.get('/api/v1/stripeapi');
+        setStripeApiKey(data.stripeApiKey);
+      } catch (error) {
+        console.log(error.response.data.message);
+      }
     }
     getStripeApiKey();
   }, []);
@@ -191,7 +195,7 @@ function App() {
             exact
           />
         </Routes>
-        {!loading && user.role !== 'admin' && <Footer />}
+        {!loading && user && user.role !== 'admin' && <Footer />}
       </div>
     </Router>
   );
