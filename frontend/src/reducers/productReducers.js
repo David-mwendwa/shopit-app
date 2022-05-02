@@ -1,4 +1,7 @@
 import {
+  ADMIN_PRODUCTS_REQUEST,
+  ADMIN_PRODUCTS_SUCCESS,
+  ADMIN_PRODUCTS_FAIL,
   ALL_PRODUCTS_REQUEST,
   ALL_PRODUCTS_SUCCESS,
   ALL_PRODUCTS_FAIL,
@@ -15,6 +18,7 @@ import {
 export const productReducer = (state = { products: [] }, action) => {
   switch (action.type) {
     case ALL_PRODUCTS_REQUEST:
+    case ADMIN_PRODUCTS_REQUEST:
       return {
         loading: true,
         products: [],
@@ -27,7 +31,13 @@ export const productReducer = (state = { products: [] }, action) => {
         resultsPerPage: action.payload.resultsPerPage,
         filteredProductsCount: action.payload.filteredProductsCount,
       };
+    case ADMIN_PRODUCTS_SUCCESS:
+      return {
+        loading: false,
+        products: action.payload,
+      };
     case ALL_PRODUCTS_FAIL:
+    case ADMIN_PRODUCTS_FAIL:
       return {
         loading: false,
         error: action.payload,
