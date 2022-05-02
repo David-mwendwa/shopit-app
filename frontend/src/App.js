@@ -29,6 +29,7 @@ import OrderSuccess from './components/cart/OrderSuccess';
 // Order Imports
 import ListOrders from './components/order/ListOrders';
 import OrderDetails from './components/order/OrderDetails';
+import ProductsList from './components/admin/ProductsList';
 
 import Protected from './components/route/Protected';
 import { loadUser } from './actions/userActions';
@@ -156,13 +157,22 @@ function App() {
             />
           </Routes>
         </div>
-        
+
         <Routes>
           <Route
             path='/dashboard'
             element={
               <Protected>
                 <Dashboard isAdmin={true} />
+              </Protected>
+            }
+            exact
+          />
+          <Route
+            path='/admin/products'
+            element={
+              <Protected>
+                <ProductsList isAdmin={true} />
               </Protected>
             }
             exact
