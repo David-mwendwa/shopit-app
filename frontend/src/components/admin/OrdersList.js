@@ -6,7 +6,12 @@ import Sidebar from './Sidebar';
 import { useAlert } from 'react-alert';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { allOrders, clearErrors } from '../../actions/orderActions';
+import {
+  allOrders,
+  clearErrors,
+  deleteOrder,
+} from '../../actions/orderActions';
+import { DELETE_ORDER_RESET } from '../../constants/orderContants';
 
 const OrdersList = () => {
   const navigate = useNavigate();
@@ -14,6 +19,7 @@ const OrdersList = () => {
   const dispatch = useDispatch();
 
   const { loading, error, orders } = useSelector((state) => state.allOrders);
+  const { isDeleted } = useSelector((state) => state.order);
 
   useEffect(() => {
     dispatch(allOrders());
@@ -22,7 +28,13 @@ const OrdersList = () => {
       alert.error(error);
       dispatch(clearErrors());
     }
-  }, [alert, dispatch, error, navigate]);
+
+    if (isDeleted) {
+      alert.success('order deleted successfully');
+      navigate('/admin/orders');
+      dispatch({ type: DELETE_ORDER_RESET });
+    }
+  }, [alert, dispatch, error, isDeleted, navigate]);
 
   const setOrders = () => {
     const data = {
@@ -55,7 +67,9 @@ const OrdersList = () => {
               className='btn btn-primary py-1 px-2'>
               <i className='fa fa-eye'></i>
             </Link>
-            <button className='btn btn-danger py-1 px-2 ml-2'>
+            <button
+              className='btn btn-danger py-1 px-2 ml-2'
+              onClick={() => deleteOrderHandler(order._id)}>
               <i className='fa fa-trash'></i>
             </button>
           </Fragment>
@@ -65,6 +79,11 @@ const OrdersList = () => {
 
     return data;
   };
+
+  const deleteOrderHandler = (id) => {
+    dispatch(deleteOrder(id));
+  };
+
   return (
     <Fragment>
       <MetaData title={'All Orders'} />

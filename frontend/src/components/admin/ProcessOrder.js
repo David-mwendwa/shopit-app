@@ -74,7 +74,7 @@ const ProcessOrder = () => {
             ) : (
               <div className='row d-flex justify-content-around'>
                 <div className='col-12 col-lg-7 order-details'>
-                  <h1 className='my-5'>Order # {order._id}</h1>
+                  <h2 className='my-5'>Order # {order._id}</h2>
 
                   <h4 className='mb-4'>Shipping Info</h4>
                   <p>
