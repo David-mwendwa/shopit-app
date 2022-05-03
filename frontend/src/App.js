@@ -21,6 +21,7 @@ import Dashboard from './components/admin/Dashboard';
 import ProductsList from './components/admin/ProductsList';
 import NewProduct from './components/admin/NewProduct';
 import UpdateProduct from './components/admin/UpdateProduct';
+import OrdersList from './components/admin/OrdersList';
 
 // Cart Imports
 import Cart from './components/cart/Cart';
@@ -200,6 +201,15 @@ function App() {
             element={
               <Protected>
                 <UpdateProduct isAdmin={true} />
+              </Protected>
+            }
+            exact
+          />
+          <Route
+            path='/admin/orders'
+            element={
+              <Protected>
+                <OrdersList isAdmin={true} />
               </Protected>
             }
             exact
