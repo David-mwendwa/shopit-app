@@ -1,4 +1,4 @@
-# d-shop e-commerce Project
+# D-Shopp e-commerce Project
 
 > Complete e-commerce site built with Node.js, React, Redux, Express, MongoDB
 
