@@ -5,7 +5,6 @@ import { useAlert } from 'react-alert';
 import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getOrderDetails, clearErrors } from '../../actions/orderActions';
-import { cartImage2 } from '../cart/CartImage';
 
 const OrderDetails = () => {
   const alert = useAlert();
@@ -91,7 +90,7 @@ const OrderDetails = () => {
                     <div className='row my-5' key={item.product}>
                       <div className='col-4 col-lg-2'>
                         <img
-                          src={item.image || cartImage2}
+                          src={item.image}
                           alt={item.name}
                           height='45'
                           width='65'

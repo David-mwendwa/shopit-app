@@ -22,6 +22,7 @@ import ProductsList from './components/admin/ProductsList';
 import NewProduct from './components/admin/NewProduct';
 import UpdateProduct from './components/admin/UpdateProduct';
 import OrdersList from './components/admin/OrdersList';
+import ProcessOrder from './components/admin/ProcessOrder';
 
 // Cart Imports
 import Cart from './components/cart/Cart';
@@ -210,6 +211,15 @@ function App() {
             element={
               <Protected>
                 <OrdersList isAdmin={true} />
+              </Protected>
+            }
+            exact
+          />
+          <Route
+            path='/admin/order/:id'
+            element={
+              <Protected>
+                <ProcessOrder isAdmin={true} />
               </Protected>
             }
             exact
