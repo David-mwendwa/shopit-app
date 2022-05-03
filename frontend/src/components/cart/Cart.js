@@ -50,8 +50,8 @@ const Cart = () => {
                     <div className='row'>
                       <div className='col-4 col-lg-3'>
                         <img
-                          src={item.image || cartImage2}
-                          alt='Laptop'
+                          src={item.image}
+                          alt={item.name}
                           height='90'
                           width='115'
                         />
