@@ -6,8 +6,8 @@ import Sidebar from './Sidebar';
 import { useAlert } from 'react-alert';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { allUsers, clearErrors } from '../../actions/userActions';
-// import { DELETE_USER_RESET } from '../../constants/userContants';
+import { allUsers, clearErrors, deleteUser } from '../../actions/userActions';
+import { DELETE_USER_RESET } from '../../constants/userConstants';
 
 const UsersList = () => {
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ const UsersList = () => {
   const dispatch = useDispatch();
 
   const { loading, error, users } = useSelector((state) => state.allUsers);
-  // const { isDeleted } = useSelector((state) => state.user);
+  const { isDeleted } = useSelector((state) => state.user);
 
   useEffect(() => {
     dispatch(allUsers());
@@ -25,12 +25,12 @@ const UsersList = () => {
       dispatch(clearErrors());
     }
 
-    // if (isDeleted) {
-    //   alert.success('user deleted successfully');
-    //   navigate('/admin/users');
-    //   dispatch({ type: DELETE_USER_RESET });
-    // }
-  }, [alert, dispatch, error, navigate]);
+    if (isDeleted) {
+      alert.success('user deleted successfully');
+      navigate('/admin/users');
+      dispatch({ type: DELETE_USER_RESET });
+    }
+  }, [alert, dispatch, error, isDeleted, navigate]);
 
   const setUsers = () => {
     const data = {
@@ -71,8 +71,9 @@ const UsersList = () => {
   };
 
   const deleteUserHandler = (id) => {
-    // dispatch(deleteUser(id));
+    dispatch(deleteUser(id));
   };
+
   return (
     <Fragment>
       <MetaData title={'All Users'} />

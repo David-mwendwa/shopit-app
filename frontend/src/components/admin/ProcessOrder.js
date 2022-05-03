@@ -42,9 +42,10 @@ const ProcessOrder = () => {
 
     if (isUpdated) {
       alert.success('Order updated successfully');
+      navigate('/admin/orders');
       dispatch({ type: UPDATE_ORDER_RESET });
     }
-  }, [dispatch, alert, error, isUpdated, orderId]);
+  }, [dispatch, alert, error, isUpdated, orderId, navigate]);
 
   const updateOrderHandler = (id) => {
     const formData = new FormData();
@@ -156,7 +157,7 @@ const ProcessOrder = () => {
                       name='status'
                       value={status}
                       onChange={(e) => setStatus(e.target.value)}>
-                      <option>Select</option>
+                      <option value=''>Select</option>
                       <option value='Processing'>Processing</option>
                       <option value='Shipped'>Shipped</option>
                       <option value='Delivered'>Delivered</option>
