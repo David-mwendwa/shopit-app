@@ -155,7 +155,10 @@ export const getAdminProducts = () => async (dispatch) => {
 export const getProductReviews = (id) => async (dispatch) => {
   try {
     dispatch({ type: GET_REVIEWS_REQUEST });
-    const { data } = await axios.get(`/api/v1/admin/reviews?=${id}`);
+    // TODO: Inspect why the request is failing
+    const res = await axios.get(`/api/v1/reviews?=${id}`);
+    console.log('data-product reviews', res);
+    const { data } = res.data;
     dispatch({ type: GET_REVIEWS_SUCCESS, payload: data.reviews });
   } catch (error) {
     dispatch({
