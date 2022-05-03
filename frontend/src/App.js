@@ -24,6 +24,7 @@ import UpdateProduct from './components/admin/UpdateProduct';
 import OrdersList from './components/admin/OrdersList';
 import ProcessOrder from './components/admin/ProcessOrder';
 import UsersList from './components/admin/UsersList';
+import UpdateUser from './components/admin/UpdateUser';
 
 // Cart Imports
 import Cart from './components/cart/Cart';
@@ -230,6 +231,15 @@ function App() {
             element={
               <Protected>
                 <UsersList isAdmin={true} />
+              </Protected>
+            }
+            exact
+          />
+          <Route
+            path='/admin/user/:id'
+            element={
+              <Protected>
+                <UpdateUser isAdmin={true} />
               </Protected>
             }
             exact
