@@ -1,5 +1,5 @@
 {
-  "name": "shopit",
+  "name": "d-shop",
   "version": "1.0.0",
   "description": "e-commerce mern application",
   "main": "server.js",
@@ -9,7 +9,8 @@
     "start": "concurrently --kill-others-on-fail \" npm run server\" \" npm run client\"",
     "dev": "SET NODE_ENV=DEVELOPMENT & nodemon backend/server",
     "prod": "SET NODE_ENV=PRODUCTION & nodemon backend/server",
-    "seeder": "node backend/utils/seeder.js"
+    "seeder": "node backend/utils/seeder.js",
+    "heroku:postbuild": "NPM_CONFIG_PRODUCTION=false && npm install --prefix frontend && npm run build --prefix frontend"
   },
   "author": "David Mwendwa",
   "license": "ISC",

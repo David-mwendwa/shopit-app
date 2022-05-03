@@ -2,6 +2,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const fileUpload = require('express-fileupload');
 const cloudinary = require('cloudinary');
+const path = require('path');
 const express = require('express');
 const app = express();
 const errorMiddleware = require('./middlewares/errors');
@@ -12,11 +13,11 @@ app.use(cookieParser());
 app.use(fileUpload({ useTempFiles: true }));
 
 // setting up cloudinary config
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_KEY,
-  api_secret: process.env.CLOUDINARY_SECRET,
-});
+// cloudinary.config({
+//   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+//   api_key: process.env.CLOUDINARY_KEY,
+//   api_secret: process.env.CLOUDINARY_SECRET,
+// });
 
 // routes
 const products = require('./routes/product.js');
@@ -28,6 +29,14 @@ app.use('/api/v1', products);
 app.use('/api/v1', auth);
 app.use('/api/v1', order);
 app.use('/api/v1', payment);
+
+if (process.env.NODE_ENV === 'PRODUCTION') {
+  app.use(express.static(path.join(__dirname, '../frontend/build')));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../frontend/build/index.html'));
+  });
+}
 
 // error middleware
 app.use(errorMiddleware);

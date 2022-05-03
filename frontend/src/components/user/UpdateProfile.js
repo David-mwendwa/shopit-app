@@ -47,19 +47,12 @@ const UpdateProfile = () => {
   const submitHandler = (e) => {
     e.preventDefault();
 
-    let formData = new FormData();
-    formData.append('name', name);
-    formData.append('email', email);
-    formData.append('avatar', avatar);
+    const formData = new FormData();
+    formData.set('name', name);
+    formData.set('email', email);
+    formData.set('avatar', avatar);
 
-    let userData = {
-      name: formData.get('name'),
-      email: formData.get('email'),
-      avatar: formData.get('avatar'),
-    };
-    console.log('update data', userData);
-
-    dispatch(updateProfile(userData));
+    dispatch(updateProfile(formData));
   };
 
   const onChange = (e) => {
