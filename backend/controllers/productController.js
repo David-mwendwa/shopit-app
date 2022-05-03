@@ -188,11 +188,8 @@ exports.getProductsReviews = catchAsyncErrors(async (req, res, next) => {
 });
 
 // Delete Product Review => /api/v1/reviews
-// TODO: make sure the request passes through
 exports.deleteReview = catchAsyncErrors(async (req, res, next) => {
-  console.log(req.query);
   const product = await Product.findById(req.query.productId);
-  console.log(product);
 
   const reviews = product.reviews.filter(
     (review) => review._id.toString() !== req.query.id.toString()

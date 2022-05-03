@@ -7,8 +7,8 @@ import Sidebar from './Sidebar';
 
 import { useAlert } from 'react-alert';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProductReviews, clearErrors } from '../../actions/productActions';
-//import { DELETE_REVIEW_RESET } from '../../constants/productConstants';
+import { getProductReviews, deleteReview, clearErrors } from '../../actions/productActions';
+import { DELETE_REVIEW_RESET } from '../../constants/productConstants';
 
 const ProductReviews = () => {
   const [productId, setProductId] = useState('');
@@ -17,9 +17,9 @@ const ProductReviews = () => {
   const dispatch = useDispatch();
 
   const { error, reviews } = useSelector((state) => state.productReviews);
-  // const { isDeleted, error: deleteError } = useSelector(
-  //   (state) => state.review
-  // );
+  const { isDeleted, error: deleteError } = useSelector(
+    (state) => state.review
+  );
 
   useEffect(() => {
     if (error) {
@@ -27,23 +27,23 @@ const ProductReviews = () => {
       dispatch(clearErrors());
     }
 
-    // if (deleteError) {
-    //   alert.error(deleteError);
-    //   dispatch(clearErrors());
-    // }
+    if (deleteError) {
+      alert.error(deleteError);
+      dispatch(clearErrors());
+    }
 
     if (productId !== '') {
       dispatch(getProductReviews(productId));
     }
 
-    // if (isDeleted) {
-    //   alert.success('Review deleted successfully');
-    //   dispatch({ type: DELETE_REVIEW_RESET });
-    // }
-  }, [dispatch, alert, error, productId]);
+    if (isDeleted) {
+      alert.success('Review deleted successfully');
+      dispatch({ type: DELETE_REVIEW_RESET });
+    }
+  }, [dispatch, alert, error, productId, deleteError, isDeleted]);
 
   const deleteReviewHandler = (id) => {
-    //dispatch(deleteReview(id, productId));
+    dispatch(deleteReview(id, productId));
   };
 
   const submitHandler = (e) => {
