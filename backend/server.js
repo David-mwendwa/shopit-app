@@ -1,60 +1,250 @@
+import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
+const __dirname = dirname(fileURLToPath(import.meta.url));
+import 'express-async-errors';
 import 'dotenv/config.js';
 import mongoose from 'mongoose';
-import app from './app.js';
+import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
+import express from 'express';
+import cors from 'cors';
 
-// handle uncought exceptions
+// Security middleware
+import helmet from 'helmet';
+import xss from 'xss-clean';
+import mongoSanitize from 'express-mongo-sanitize';
+import rateLimit from 'express-rate-limit';
+import hpp from 'hpp';
+
+// =====================
+// GLOBAL ERROR HANDLERS
+// =====================
+
+// Handle uncaught exceptions (synchronous errors) i.e undefined value
 process.on('uncaughtException', (err) => {
-  console.log(`ERROR: ${err.message}`);
-  console.log(`Shutting down the server due to uncaught exceptions`);
+  console.error('UNCAUGHT EXCEPTION! 💥 Shutting down...');
+  console.error('Error:', err.name, err.message);
+  console.error(err.stack);
   process.exit(1);
 });
 
-// Set Mongoose options
-mongoose.set('strictQuery', false);
+// Initialize Express app
+const app = express();
 
-// Database connection
-const connectDB = async () => {
-  try {
-    const conn = await mongoose.connect(
-      process.env.MONGO_URI || 'mongodb://localhost:27017/markethub',
-      {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
-        socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
-      }
-    );
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
-  } catch (error) {
-    console.error(`Error: ${error.message}`);
-    process.exit(1);
-  }
+app.set('trust proxy', 1); // trust first proxy (Render)
+
+// =====================
+// GLOBAL MIDDLEWARE
+// =====================
+
+// Enable CORS
+app.use(
+  cors({
+    origin: [
+      'http://localhost:3000',
+      'https://markethub.netlify.app',
+    ],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  })
+);
+
+// =====================
+// SECURITY MIDDLEWARE
+// =====================
+
+// Set security HTTP headers
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'", 'trusted-cdn.com'],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", 'data:', 'blob:'],
+        connectSrc: ["'self'", 'api.yourservice.com'],
+      },
+    },
+    crossOriginEmbedderPolicy: false,
+    crossOriginOpenerPolicy: { policy: 'same-origin' },
+    crossOriginResourcePolicy: { policy: 'same-site' },
+    hsts: { maxAge: 15552000, includeSubDomains: true },
+  })
+);
+
+// Data sanitization against NoSQL injection
+app.use(mongoSanitize());
+
+// Parse JSON and URL-encoded request bodies
+app.use(express.json({ limit: '10kb' }));
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+
+// Clean any user input from XSS attacks
+app.use(xss());
+
+// Parse cookies
+app.use(cookieParser());
+
+// Prevent parameter pollution
+app.use(
+  hpp({
+    whitelist: ['page', 'limit', 'sort', 'fields', 'search', 'status'],
+  })
+);
+
+// =====================
+// LOGGING (Development only)
+// =====================
+if (/dev/i.test(process.env.NODE_ENV)) {
+  app.use(morgan('dev'));
+}
+
+// =====================
+// RATE LIMITING
+// =====================
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // Limit each IP to 10 requests per window
+  message: 'Too many login attempts. Please try again later.',
+  skip: (req) => req.path === '/health',
+});
+
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per window
+  message: 'Too many requests from this IP, please try again later.',
+  skip: (req) => req.path.startsWith('/api/health'),
+});
+
+app.use('/api', apiLimiter);
+app.use('/api/v1/auth', authLimiter);
+
+// =====================
+// ROUTES
+// =====================
+
+/**
+ * Simple health check endpoint for uptime and environment monitoring.
+ *
+ * Returns a JSON payload with basic status information that can be used by
+ * load balancers or monitoring tools.
+ *
+ * @route GET /api/health
+ */
+app.get('/api/health', (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  res.status(200).json({
+    status: 'success',
+    message: 'Server is running',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development',
+    uptime: process.uptime(),
+  });
+});
+
+import productRoutes from './routes/product.js';
+import authRoutes from './routes/auth.js';
+import orderRoutes from './routes/order.js';
+import paymentRoutes from './routes/payment.js';
+
+app.use('/api/v1', productRoutes);
+app.use('/api/v1', authRoutes);
+app.use('/api/v1', orderRoutes);
+app.use('/api/v1', paymentRoutes);
+
+// =====================
+// ERROR HANDLING
+// =====================
+import notFoundMiddleware from './middleware/notFound.js';
+import errorHandlerMiddleware from './middleware/errorHandler.js';
+
+// 404 handler (must be after routes)
+app.use(notFoundMiddleware);
+
+// Global error handler (must be last)
+app.use(errorHandlerMiddleware);
+
+// =====================
+// DATABASE CONNECTION
+// =====================
+if (!process.env.MONGO_URI) {
+  console.error('MONGO_URI is not defined in environment variables');
+  process.exit(1);
+}
+
+const DB = process.env.MONGO_URI.replace(
+  '<PASSWORD>',
+  process.env.MONGO_PASSWORD || ''
+);
+
+const mongooseOptions = {
+  serverSelectionTimeoutMS: 10000, // Wait up to 10s for server selection
+  socketTimeoutMS: 30000, // Close idle connections after 30s
+  maxPoolSize: 10, // Reasonable default for most apps
+  w: 'majority', // Ensure write acknowledgement
 };
 
-// Start server
-const startServer = async () => {
-  try {
-    await connectDB();
-    const port = process.env.PORT || 5001;
-    const server = app.listen(port, () => {
-      console.log(`Server running on port ${port}`);
-      console.log(`Environment: ${process.env.NODE_ENV}`);
-    });
-
-    // Handle unhandled promise rejections
-    process.on('unhandledRejection', (err) => {
-      console.log(`ERROR: ${err.message}`);
-      console.log(
-        'Shutting down the server due to unhandled promise rejection'
-      );
-      server.close(() => {
-        process.exit(1);
-      });
-    });
-  } catch (error) {
-    console.error(`Error: ${error.message}`);
+mongoose
+  .connect(DB, mongooseOptions)
+  .then(() => console.log('✅ MongoDB connection successful'))
+  .catch((err) => {
+    console.error('❌ MongoDB connection error:', err.message);
     process.exit(1);
-  }
-};
+  });
 
-startServer();
+// =====================
+// SERVER SETUP
+// =====================
+const PORT = process.env.PORT || 5001;
+const server = app.listen(PORT, '0.0.0.0', () => {
+  console.log(
+    `🚀 Server running in ${
+      process.env.NODE_ENV || 'development'
+    } mode on port ${PORT}`
+  );
+  console.log(`📡 Connect: http://localhost:${PORT}`);
+});
+
+// =====================
+// GLOBAL ERROR HANDLERS
+// =====================
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (err) => {
+  console.error('UNHANDLED REJECTION! 💥 Shutting down...');
+  console.error('Error:', err.name, err.message);
+  console.error(err.stack); // Add stack trace for debugging
+  server.close(() => {
+    process.exit(1);
+  });
+});
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (err) => {
+  console.error('UNCAUGHT EXCEPTION! 💥 Shutting down...');
+  console.error('Error:', err.name, err.message);
+  console.error(err.stack); // Add stack trace for debugging
+  server.close(() => {
+    process.exit(1);
+  });
+});
+
+// Handle SIGTERM (for Heroku, etc.)
+process.on('SIGTERM', () => {
+  console.log('👋 SIGTERM RECEIVED. Shutting down gracefully');
+  server.close(() => {
+    console.log('💥 Process terminated!');
+  });
+});
+
+// Handle process termination (Ctrl+C)
+process.on('SIGINT', () => {
+  console.log('👋 SIGINT RECEIVED. Shutting down gracefully');
+  server.close(() => {
+    console.log('💥 Process terminated!');
+    process.exit(0);
+  });
+});
+
+export default app;

@@ -7,19 +7,19 @@ import {
   updateOrder,
   deleteOrder,
 } from '../controllers/orderController.js';
-import { isAuthenticatedUser, authorizeRoles } from '../middlewares/auth.js';
+import { authenticate, authorizeRoles } from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.route('/order/new').post(isAuthenticatedUser, newOrder);
-router.route('/orders/me').get(isAuthenticatedUser, myOrders);
-router.route('/order/:id').get(isAuthenticatedUser, getSingleOrder);
+router.route('/order/new').post(authenticate, newOrder);
+router.route('/orders/me').get(authenticate, myOrders);
+router.route('/order/:id').get(authenticate, getSingleOrder);
 router
   .route('/admin/orders')
-  .get(isAuthenticatedUser, authorizeRoles('admin'), allOrders);
+  .get(authenticate, authorizeRoles('admin'), allOrders);
 router
   .route('/admin/order/:id')
-  .patch(isAuthenticatedUser, authorizeRoles('admin'), updateOrder)
-  .delete(isAuthenticatedUser, authorizeRoles('admin'), deleteOrder);
+  .patch(authenticate, authorizeRoles('admin'), updateOrder)
+  .delete(authenticate, authorizeRoles('admin'), deleteOrder);
 
 export default router;
