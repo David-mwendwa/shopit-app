@@ -1,9 +1,11 @@
-const { StatusCodes } = require('http-status-codes');
-const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+import { StatusCodes } from 'http-status-codes';
+import catchAsyncErrors from '../middlewares/catchAsyncErrors.js';
+import Stripe from 'stripe';
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 // Process stripe payments => /api/v1/payment/process
-exports.processPayment = catchAsyncErrors(async (req, res, next) => {
+export const processPayment = catchAsyncErrors(async (req, res, next) => {
   const paymentIntent = await stripe.paymentIntents.create({
     amount: req.body.amount,
     currency: 'usd',
@@ -16,6 +18,6 @@ exports.processPayment = catchAsyncErrors(async (req, res, next) => {
 });
 
 // Send Stripe API Key => /api/stripeapi
-exports.sendStripeApiKey = catchAsyncErrors(async (req, res, next) => {
+export const sendStripeApiKey = catchAsyncErrors(async (req, res, next) => {
   res.status(StatusCodes.OK).json({ stripeApiKey: process.env.STRIPE_API_KEY });
 });

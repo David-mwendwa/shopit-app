@@ -4,7 +4,7 @@ import MetaData from '../layout/MetaData';
 import Sidebar from './Sidebar';
 import { useNavigate } from 'react-router-dom';
 
-import { useAlert } from 'react-alert';
+import { showError, showSuccess } from '../../utils/alert';
 import { useDispatch, useSelector } from 'react-redux';
 import { newProduct, clearErrors } from '../../actions/productActions';
 import { NEW_PRODUCT_RESET } from '../../constants/productConstants';
@@ -35,7 +35,6 @@ const NewProduct = () => {
     'Home',
   ];
 
-  const alert = useAlert();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -43,16 +42,16 @@ const NewProduct = () => {
 
   useEffect(() => {
     if (error) {
-      alert.error(error);
+      showError(error);
       dispatch(clearErrors());
     }
 
     if (success) {
       navigate('/admin/products');
-      alert.success('Product created successfully');
+      showSuccess('Product created successfully');
       dispatch({ type: NEW_PRODUCT_RESET });
     }
-  }, [dispatch, alert, error, success, navigate]);
+  }, [dispatch, error, success, navigate]);
 
   const submitHandler = (e) => {
     e.preventDefault();

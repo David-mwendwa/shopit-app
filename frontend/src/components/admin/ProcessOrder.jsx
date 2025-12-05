@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import MetaData from '../layout/MetaData';
 import Loader from '../layout/Loader';
 import Sidebar from './Sidebar';
-import { useAlert } from 'react-alert';
+import { showError, showSuccess } from '../../utils/alert';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -15,7 +15,6 @@ import { UPDATE_ORDER_RESET } from '../../constants/orderContants';
 const ProcessOrder = () => {
   const [status, setStatus] = useState('');
 
-  const alert = useAlert();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id: orderId } = useParams();
@@ -36,16 +35,16 @@ const ProcessOrder = () => {
     dispatch(getOrderDetails(orderId));
 
     if (error) {
-      alert.error(error);
+      showError(error);
       dispatch(clearErrors());
     }
 
     if (isUpdated) {
-      alert.success('Order updated successfully');
+      showSuccess('Order is updated successfully');
       navigate('/admin/orders');
       dispatch({ type: UPDATE_ORDER_RESET });
     }
-  }, [dispatch, alert, error, isUpdated, orderId, navigate]);
+  }, [dispatch, error, orderId, isUpdated, navigate]);
 
   const updateOrderHandler = (id) => {
     const formData = new FormData();

@@ -1,8 +1,7 @@
-//require('dotenv').config({ path: '../config/config.env' });
-require('dotenv').config();
-const Product = require('../models/Product');
-const products = require('../data/products.json');
-const connectDB = require('../db/connect');
+import 'dotenv/config.js';
+import Product from '../models/Product.js';
+import products from '../data/products.json' assert { type: 'json' };
+import connectDB from '../db/connect.js';
 
 const seedProducts = async () => {
   try {
@@ -16,4 +15,7 @@ const seedProducts = async () => {
     process.exit(1);
   }
 };
-seedProducts();
+seedProducts().catch((error) => {
+  console.error('Error seeding products:', error);
+  process.exit(1);
+});

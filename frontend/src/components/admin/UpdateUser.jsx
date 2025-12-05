@@ -3,7 +3,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import MetaData from '../layout/MetaData';
 import Sidebar from './Sidebar';
-import { useAlert } from 'react-alert';
+import { showError, showSuccess } from '../../utils/alert';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   updateUser,
@@ -17,7 +17,6 @@ const UpdateUser = () => {
   const [email, setEmail] = useState('');
   const [role, setRole] = useState('');
 
-  const alert = useAlert();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -34,15 +33,15 @@ const UpdateUser = () => {
       setRole(user.role);
     }
     if (isUpdated) {
-      alert.success('user updated successfully');
+      showSuccess('user updated successfully');
       navigate('/admin/users');
       dispatch({ type: UPDATE_USER_RESET });
     }
     if (error) {
-      alert.error(error);
+      showError(error);
       dispatch(clearErrors());
     }
-  }, [dispatch, alert, error, navigate, user, isUpdated, userId]);
+  }, [dispatch, error, navigate, user, isUpdated, userId]);
 
   const submitHandler = (e) => {
     e.preventDefault();

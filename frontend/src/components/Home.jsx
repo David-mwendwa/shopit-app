@@ -5,7 +5,7 @@ import Pagination from 'react-js-pagination';
 import 'rc-slider/assets/index.css';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { useAlert } from 'react-alert';
+import { showError } from '../utils/alert';
 import { getProducts } from '../actions/productActions';
 import Loader from './layout/Loader';
 import MetaData from './layout/MetaData';
@@ -38,7 +38,6 @@ const Home = () => {
     'Home',
   ];
 
-  const alert = useAlert();
   const dispatch = useDispatch();
 
   const {
@@ -52,10 +51,11 @@ const Home = () => {
 
   useEffect(() => {
     if (error) {
-      return alert.error(error);
+      showError(error);
+      return;
     }
     dispatch(getProducts(keyword, currentPage, price, category, rating));
-  }, [dispatch, error, alert, currentPage, keyword, price, category, rating]);
+  }, [dispatch, error, currentPage, keyword, price, category, rating]);
 
   function setCurrentPageNo(pageNumber) {
     setCurrentPage(pageNumber);

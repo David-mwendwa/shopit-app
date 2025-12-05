@@ -4,16 +4,17 @@ import { MDBDataTable } from 'mdbreact';
 import MetaData from '../layout/MetaData';
 import Loader from '../layout/Loader';
 import Sidebar from './Sidebar';
-
-import { useAlert } from 'react-alert';
+import { showError, showSuccess } from '../../utils/alert';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProductReviews, deleteReview, clearErrors } from '../../actions/productActions';
+import {
+  getProductReviews,
+  deleteReview,
+  clearErrors,
+} from '../../actions/productActions';
 import { DELETE_REVIEW_RESET } from '../../constants/productConstants';
 
 const ProductReviews = () => {
   const [productId, setProductId] = useState('');
-
-  const alert = useAlert();
   const dispatch = useDispatch();
 
   const { error, reviews } = useSelector((state) => state.productReviews);
@@ -23,12 +24,12 @@ const ProductReviews = () => {
 
   useEffect(() => {
     if (error) {
-      alert.error(error);
+      showError(error);
       dispatch(clearErrors());
     }
 
     if (deleteError) {
-      alert.error(deleteError);
+      showError(deleteError);
       dispatch(clearErrors());
     }
 
@@ -37,10 +38,10 @@ const ProductReviews = () => {
     }
 
     if (isDeleted) {
-      alert.success('Review deleted successfully');
+      showSuccess('Review deleted successfully');
       dispatch({ type: DELETE_REVIEW_RESET });
     }
-  }, [dispatch, alert, error, productId, deleteError, isDeleted]);
+  }, [dispatch, error, productId, deleteError, isDeleted]);
 
   const deleteReviewHandler = (id) => {
     dispatch(deleteReview(id, productId));

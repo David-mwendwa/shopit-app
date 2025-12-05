@@ -2,7 +2,7 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MetaData from '../layout/MetaData';
-import { useAlert } from 'react-alert';
+import { showError, showSuccess } from '../../utils/alert';
 import { useDispatch, useSelector } from 'react-redux';
 import { updatePassword, clearErrors } from '../../actions/userActions';
 import { UPDATE_PASSWORD_RESET } from '../../constants/userConstants';
@@ -11,7 +11,6 @@ const UpdatePassword = () => {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
 
-  const alert = useAlert();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -19,15 +18,15 @@ const UpdatePassword = () => {
 
   useEffect(() => {
     if (isUpdated) {
-      alert.success('password updated successfully');
+      showSuccess('Password updated successfully');
       navigate('/me');
       dispatch({ type: UPDATE_PASSWORD_RESET });
     }
     if (error) {
-      alert.error(error);
+      showError(error);
       dispatch(clearErrors());
     }
-  }, [dispatch, alert, error, navigate, isUpdated]);
+  }, [dispatch, error, navigate, isUpdated]);
 
   const submitHandler = (e) => {
     e.preventDefault();

@@ -3,7 +3,7 @@ import { Carousel } from 'react-bootstrap';
 import Loader from '../layout/Loader';
 import MetaData from '../layout/MetaData';
 import { useParams } from 'react-router-dom';
-import { useAlert } from 'react-alert';
+import { showError, showSuccess } from '../../utils/alert';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getProductDetails,
@@ -18,7 +18,6 @@ const ProductDetails = () => {
   const [quantity, setQuantity] = useState(1);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
-  const alert = useAlert();
   const { id } = useParams();
   const dispatch = useDispatch();
 
@@ -35,7 +34,7 @@ const ProductDetails = () => {
     dispatch(getProductDetails(id));
 
     if (error) {
-      alert.error(error);
+      showError(error);
       dispatch(clearErrors());
     }
     // if (reviewError) {
@@ -43,10 +42,10 @@ const ProductDetails = () => {
     //   dispatch(clearErrors());
     // }
     if (success) {
-      alert.success('review submitted successfully');
+      showSuccess('Review posted successfully');
       dispatch({ type: NEW_REVIEW_RESET });
     }
-  }, [dispatch, alert, error, id, success]);
+  }, [dispatch, error, id, success, product]);
 
   const increaseQty = () => {
     const count = document.querySelector('.count');

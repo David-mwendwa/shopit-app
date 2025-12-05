@@ -3,7 +3,7 @@ import axios from 'axios';
 import MetaData from '../layout/MetaData';
 import CheckoutSteps from './CheckoutSteps';
 import { useNavigate } from 'react-router-dom';
-import { useAlert } from 'react-alert';
+import { showError } from '../../utils/alert';
 import { useDispatch, useSelector } from 'react-redux';
 import { createOrder, clearErrors } from '../../actions/orderActions';
 import {
@@ -27,7 +27,6 @@ const options = {
 
 const Payment = () => {
   const navigate = useNavigate();
-  const alert = useAlert();
   const stripe = useStripe();
   const elements = useElements();
   const dispatch = useDispatch();
@@ -38,10 +37,10 @@ const Payment = () => {
 
   useEffect(() => {
     if (error) {
-      alert.error(error);
+      showError(error);
       dispatch(clearErrors());
     }
-  }, [alert, dispatch, error]);
+  }, [dispatch, error]);
 
   const order = {
     orderItems: cartItems,
@@ -97,12 +96,12 @@ const Payment = () => {
           dispatch(createOrder(order));
           navigate('/success');
         } else {
-          alert.error('There is some issue while payment is processing');
+          showError('There is some issue while payment is processing');
         }
       }
     } catch (error) {
       document.querySelector('#pay_btn').disabled = false;
-      alert.error(error.response.data.message);
+      showError(error.response.data.message);
       //console.log(error.response.data);
     }
   };

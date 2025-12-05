@@ -3,7 +3,7 @@ import MetaData from '../layout/MetaData';
 import { MDBDataTable } from 'mdbreact';
 import Loader from '../layout/Loader';
 import Sidebar from './Sidebar';
-import { useAlert } from 'react-alert';
+import { showError, showSuccess } from '../../utils/alert';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -15,7 +15,6 @@ import { DELETE_ORDER_RESET } from '../../constants/orderContants';
 
 const OrdersList = () => {
   const navigate = useNavigate();
-  const alert = useAlert();
   const dispatch = useDispatch();
 
   const { loading, error, orders } = useSelector((state) => state.allOrders);
@@ -25,16 +24,16 @@ const OrdersList = () => {
     dispatch(allOrders());
 
     if (error) {
-      alert.error(error);
+      showError(error);
       dispatch(clearErrors());
     }
 
     if (isDeleted) {
-      alert.success('order deleted successfully');
+      showSuccess('Order deleted successfully');
       navigate('/admin/orders');
       dispatch({ type: DELETE_ORDER_RESET });
     }
-  }, [alert, dispatch, error, isDeleted, navigate]);
+  }, [dispatch, error, isDeleted, navigate]);
 
   const setOrders = () => {
     const data = {

@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Loader from '../layout/Loader';
 import MetaData from '../layout/MetaData';
-import { useAlert } from 'react-alert';
+import { showError } from '../../utils/alert';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, clearErrors } from '../../actions/userActions';
 
@@ -10,7 +10,6 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const alert = useAlert();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -26,10 +25,10 @@ const Login = () => {
       navigate(redirect);
     }
     if (error) {
-      alert.error(error);
+      showError(error);
       dispatch(clearErrors());
     }
-  }, [dispatch, alert, isAuthenticated, error, navigate, redirect]);
+  }, [dispatch, isAuthenticated, error, navigate, redirect]);
 
   const submitHandler = (e) => {
     e.preventDefault();

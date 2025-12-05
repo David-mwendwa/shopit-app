@@ -1,11 +1,11 @@
-const { StatusCodes } = require('http-status-codes');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
-const ErrorHandler = require('../utils/errorHandler');
-const catchAsyncErrors = require('./catchAsyncErrors');
+import { StatusCodes } from 'http-status-codes';
+import jwt from 'jsonwebtoken';
+import User from '../models/User.js';
+import ErrorHandler from '../utils/errorHandler.js';
+import catchAsyncErrors from './catchAsyncErrors.js';
 
 // checks if user is authenticated or not
-exports.isAuthenticatedUser = catchAsyncErrors(async (req, res, next) => {
+export const isAuthenticatedUser = catchAsyncErrors(async (req, res, next) => {
   const { token } = req.cookies;
   if (!token) {
     return next(
@@ -20,7 +20,7 @@ exports.isAuthenticatedUser = catchAsyncErrors(async (req, res, next) => {
   next();
 });
 
-exports.authorizeRoles = (...roles) => {
+export const authorizeRoles = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
       return next(

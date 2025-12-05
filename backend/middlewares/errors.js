@@ -1,7 +1,7 @@
-const { StatusCodes } = require('http-status-codes');
-const ErrorHandler = require('../utils/errorHandler');
+import { StatusCodes } from 'http-status-codes';
+import ErrorHandler from '../utils/errorHandler.js';
 
-module.exports = (err, req, res, next) => {
+const errorHandler = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
 
   if (process.env.NODE_ENV === 'DEVELOPMENT') {
@@ -15,66 +15,41 @@ module.exports = (err, req, res, next) => {
     let error = { ...err };
     error.message = err.message;
 
-    // wrong mongoose object ID error
+    // Wrong Mongoose Object ID Error
     if (err.name === 'CastError') {
       const message = `Resource not found. Invalid: ${err.path}`;
       error = new ErrorHandler(message, StatusCodes.BAD_REQUEST);
     }
 
-    // handle mongoose validation error
+    // Handle Mongoose Validation Error
     if (err.name === 'ValidationError') {
-      let message = Object.keys(err.errors).map(
-        (key) => err.errors[key].message
-      );
-      let regex = /`(\w+)`/g;
-      let fields = [];
-      let match = regex.exec(message);
-      while (match !== null) {
-        fields.push(match[1]);
-        match = regex.exec(message);
-      }
-      message =
-        (fields.length &&
-          `${fields.join(', ')} ${
-            fields.length > 1 ? 'fields are' : 'field is'
-          } required`) ||
-        message;
+      const message = Object.values(err.errors).map((val) => val.message);
       error = new ErrorHandler(message, StatusCodes.BAD_REQUEST);
     }
-    // if (err.name === 'ValidationError') {
-    //   let message = Object.values(err.errors)
-    //     .map((item) => item.message)
-    //     .join(', ');
-    //   error = new ErrorHandler(message, StatusCodes.BAD_REQUEST);
-    // }
 
-    // handle mongoose duplicate key errors
+    // Handle Mongoose Duplicate Key Error
     if (err.code === 11000) {
-      const message = `Duplicate ${Object.keys(err.keyValue)} entered.`;
+      const message = `Duplicate ${Object.keys(err.keyValue)} entered`;
       error = new ErrorHandler(message, StatusCodes.BAD_REQUEST);
     }
 
-    // handle wrong jwt error
+    // Handle JWT Error
     if (err.name === 'JsonWebTokenError') {
-      const message = `JSON Web Token is invalid. Please try again.`;
+      const message = 'JSON Web Token is invalid. Try Again!!!';
       error = new ErrorHandler(message, StatusCodes.BAD_REQUEST);
     }
 
-    // handle expired jwt error
+    // Handle JWT Expired Error
     if (err.name === 'TokenExpiredError') {
-      const message = `JSON Web Token is expired. Please try again.`;
+      const message = 'JSON Web Token is expired. Try Again!!!';
       error = new ErrorHandler(message, StatusCodes.BAD_REQUEST);
     }
 
-    res.status(404).json({
+    res.status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR).json({
       success: false,
-      message: error.message || 'Internal Server Error',
+      message: error.message || 'Server Error',
     });
-    // res.status(500).json({
-    //   success: false,
-    //   error: error,
-    //   errMessage: error.message,
-    //   stack: error.stack,
-    // });
   }
 };
+
+export default errorHandler;

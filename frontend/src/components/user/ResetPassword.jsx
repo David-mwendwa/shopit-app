@@ -2,7 +2,7 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import MetaData from '../layout/MetaData';
-import { useAlert } from 'react-alert';
+import { showError, showSuccess } from '../../utils/alert';
 import { useDispatch, useSelector } from 'react-redux';
 import { resetPassword, clearErrors } from '../../actions/userActions';
 
@@ -10,7 +10,6 @@ const ResetPassword = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const alert = useAlert();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { token } = useParams();
@@ -21,14 +20,14 @@ const ResetPassword = () => {
 
   useEffect(() => {
     if (!loading && success) {
-      alert.success('password updated successfully');
+      showSuccess('Password updated successfully');
       navigate('/login');
     }
     if (error) {
-      alert.error(error);
+      showError(error);
       dispatch(clearErrors());
     }
-  }, [dispatch, alert, error, navigate, success, loading]);
+  }, [dispatch, error, loading, success, navigate]);
 
   const submitHandler = (e) => {
     e.preventDefault();

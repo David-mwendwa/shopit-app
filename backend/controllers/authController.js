@@ -1,15 +1,15 @@
-const crypto = require('crypto');
-const cloudinary = require('cloudinary');
-const { StatusCodes } = require('http-status-codes');
-const User = require('../models/User');
-const ErrorHandler = require('../utils/errorHandler');
-const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
-const sendToken = require('../utils/jwt');
-const sendEmail = require('../utils/sendEmail');
-const { upload } = require('../utils/cloudinary');
+import crypto from 'crypto';
+import { v2 as cloudinary } from 'cloudinary';
+import { StatusCodes } from 'http-status-codes';
+import User from '../models/User.js';
+import ErrorHandler from '../utils/errorHandler.js';
+import catchAsyncErrors from '../middlewares/catchAsyncErrors.js';
+import sendToken from '../utils/jwt.js';
+import sendEmail from '../utils/sendEmail.js';
+import { upload } from '../utils/cloudinary.js';
 
 // Register user => /api/v1/register
-exports.registerUser = catchAsyncErrors(async (req, res, next) => {
+export const registerUser = catchAsyncErrors(async (req, res, next) => {
   // upload image on cloudinary
   let options = {
     folder: 'avatars',
@@ -43,7 +43,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
 });
 
 // login user => /api/v1/login
-exports.loginUser = catchAsyncErrors(async (req, res, next) => {
+export const loginUser = catchAsyncErrors(async (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password) {
     return next(
@@ -69,7 +69,7 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 });
 
 // forgot password => /api/v1/password/forgot
-exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
+export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
     return next(new ErrorHandler('User not found', StatusCodes.NOT_FOUND));
@@ -103,7 +103,7 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
 });
 
 // reset password => /api/v1/password/reset/:token
-exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
+export const resetPassword = catchAsyncErrors(async (req, res, next) => {
   // hash url token
   const resetPasswordToken = crypto
     .createHash('sha256')
@@ -136,7 +136,7 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
 });
 
 // Get currently logged in user details => /api/v1/me
-exports.getUserProfile = catchAsyncErrors(async (req, res, next) => {
+export const getUserProfile = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findById(req.user.id);
   res.status(StatusCodes.OK).json({
     success: true,
@@ -145,7 +145,7 @@ exports.getUserProfile = catchAsyncErrors(async (req, res, next) => {
 });
 
 // Update / Change password => /api/v1/password/update
-exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
+export const updatePassword = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findById(req.user.id).select('+password');
 
   // check previous user password
@@ -159,7 +159,7 @@ exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
 });
 
 // Update user profile => /api/v1/me/update
-exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
+export const updateProfile = catchAsyncErrors(async (req, res, next) => {
   const newUserData = { name: req.body.name, email: req.body.email }; // TODO: should not update the role
 
   // update avatar
@@ -187,19 +187,19 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
 });
 
 // logout user => /api/v1/logout
-exports.logout = catchAsyncErrors(async (req, res, next) => {
+export const logout = catchAsyncErrors(async (req, res, next) => {
   res.cookie('token', null, { expires: new Date(Date.now()), httpOnly: true });
   res.status(StatusCodes.OK).json({ success: true, message: 'Logged out' });
 });
 
 // Get all users => /api/v1/admin/users
-exports.allUsers = catchAsyncErrors(async (req, res, next) => {
+export const allUsers = catchAsyncErrors(async (req, res, next) => {
   const users = await User.find({});
   res.status(StatusCodes.OK).json({ success: true, users });
 });
 
 // Get user details => /api/v1/admin/user/:id
-exports.getUserDetails = catchAsyncErrors(async (req, res, next) => {
+export const getUserDetails = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findById(req.params.id);
   if (!user) {
     return next(new ErrorHandler(`No user found with id: ${req.params.id}`));
@@ -208,7 +208,7 @@ exports.getUserDetails = catchAsyncErrors(async (req, res, next) => {
 });
 
 // Update user profile - admin => /api/v1/admin/user/:id
-exports.updateUser = catchAsyncErrors(async (req, res, next) => {
+export const updateUser = catchAsyncErrors(async (req, res, next) => {
   const newUserData = {
     name: req.body.name,
     email: req.body.email,
@@ -226,7 +226,7 @@ exports.updateUser = catchAsyncErrors(async (req, res, next) => {
 });
 
 // Get user details => /api/v1/admin/user/:id
-exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
+export const deleteUser = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findById(req.params.id);
   if (!user) {
     return next(new ErrorHandler(`No user found with id: ${req.params.id}`));

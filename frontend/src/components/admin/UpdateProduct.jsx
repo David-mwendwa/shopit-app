@@ -4,7 +4,7 @@ import MetaData from '../layout/MetaData';
 import Sidebar from './Sidebar';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { useAlert } from 'react-alert';
+import { showError, showSuccess } from '../../utils/alert';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   updateProduct,
@@ -40,7 +40,6 @@ const UpdateProduct = () => {
   const [oldImages, setOldImages] = useState([]);
   const [imagesPreview, setImagesPreview] = useState([]);
 
-  const alert = useAlert();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id: productId } = useParams();
@@ -65,30 +64,21 @@ const UpdateProduct = () => {
       setOldImages(product.images);
     }
     if (error) {
-      alert.error(error);
+      showError(error);
       dispatch(clearErrors());
     }
 
     if (updateError) {
-      alert.error(updateError);
+      showError(updateError);
       dispatch(clearErrors());
     }
 
     if (isUpdated) {
       navigate('/admin/products');
-      alert.success('Product updated successfully');
+      showSuccess('Product updated successfully');
       dispatch({ type: UPDATE_PRODUCT_RESET });
     }
-  }, [
-    dispatch,
-    alert,
-    error,
-    navigate,
-    isUpdated,
-    updateError,
-    product,
-    productId,
-  ]);
+  }, [dispatch, error, product, productId, updateError, isUpdated, navigate]);
 
   const submitHandler = (e) => {
     e.preventDefault();

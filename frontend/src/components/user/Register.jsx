@@ -2,7 +2,7 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MetaData from '../layout/MetaData';
-import { useAlert } from 'react-alert';
+import { showError, showSuccess } from '../../utils/alert';
 import { useDispatch, useSelector } from 'react-redux';
 import { register, clearErrors } from '../../actions/userActions';
 
@@ -20,9 +20,8 @@ const Register = () => {
     '/images/default_avatar.jpg'
   );
 
-  const alert = useAlert();
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const { isAuthenticated, error, loading } = useSelector(
     (state) => state.auth
@@ -34,10 +33,10 @@ const Register = () => {
     }
 
     if (error) {
-      alert.error(error);
+      showError(error);
       dispatch(clearErrors());
     }
-  }, [dispatch, alert, isAuthenticated, error, navigate]);
+  }, [dispatch, isAuthenticated, error, navigate]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -57,12 +56,14 @@ const Register = () => {
 
       reader.onload = () => {
         if (reader.readyState === 2) {
-          setAvatarPreview(reader.result);
           setAvatar(reader.result);
+          setAvatarPreview(reader.result);
         }
       };
 
-      reader.readAsDataURL(e.target.files[0]);
+      if (e.target.files[0]) {
+        reader.readAsDataURL(e.target.files[0]);
+      }
     } else {
       setUser({ ...user, [e.target.name]: e.target.value });
     }

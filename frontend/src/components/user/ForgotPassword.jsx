@@ -2,14 +2,13 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MetaData from '../layout/MetaData';
-import { useAlert } from 'react-alert';
+import { showError, showSuccess } from '../../utils/alert';
 import { useDispatch, useSelector } from 'react-redux';
 import { forgotPassword, clearErrors } from '../../actions/userActions';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
 
-  const alert = useAlert();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -19,13 +18,13 @@ const ForgotPassword = () => {
 
   useEffect(() => {
     if (message) {
-      alert.success(message);
+      showSuccess(message);
     }
     if (error) {
-      alert.error(error);
+      showError(error);
       dispatch(clearErrors());
     }
-  }, [dispatch, alert, error, navigate, message]);
+  }, [dispatch, error, navigate, message]);
 
   const submitHandler = (e) => {
     e.preventDefault();

@@ -1,15 +1,15 @@
-const express = require('express');
-const router = express.Router();
-
-const {
+import express from 'express';
+import {
   newOrder,
   getSingleOrder,
   myOrders,
   allOrders,
   updateOrder,
   deleteOrder,
-} = require('../controllers/orderController');
-const { isAuthenticatedUser, authorizeRoles } = require('../middlewares/auth');
+} from '../controllers/orderController.js';
+import { isAuthenticatedUser, authorizeRoles } from '../middlewares/auth.js';
+
+const router = express.Router();
 
 router.route('/order/new').post(isAuthenticatedUser, newOrder);
 router.route('/orders/me').get(isAuthenticatedUser, myOrders);
@@ -22,4 +22,4 @@ router
   .patch(isAuthenticatedUser, authorizeRoles('admin'), updateOrder)
   .delete(isAuthenticatedUser, authorizeRoles('admin'), deleteOrder);
 
-module.exports = router;
+export default router;

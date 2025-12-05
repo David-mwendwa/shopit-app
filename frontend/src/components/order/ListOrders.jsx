@@ -2,13 +2,12 @@ import React, { Fragment, useEffect } from 'react';
 import MetaData from '../layout/MetaData';
 import { MDBDataTable } from 'mdbreact';
 import Loader from '../layout/Loader';
-import { useAlert } from 'react-alert';
+import { showError } from '../../utils/alert';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { myOrders, clearErrors } from '../../actions/orderActions';
 
 const ListOrders = () => {
-  const alert = useAlert();
   const dispatch = useDispatch();
   const { loading, error, orders } = useSelector((state) => state.myOrders);
 
@@ -16,10 +15,10 @@ const ListOrders = () => {
     dispatch(myOrders());
 
     if (error) {
-      alert.error(error);
+      showError(error);
       dispatch(clearErrors());
     }
-  }, [alert, dispatch, error]);
+  }, [dispatch, error]);
 
   const setOrders = () => {
     const data = {

@@ -1,6 +1,7 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "MarketHub",
+  "name": "MarketHub - Modern E-commerce Platform",
+  "description": "Your one-stop online marketplace for all your shopping needs",
   "icons": [
     {
       "src": "favicon.ico",

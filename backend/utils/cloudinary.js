@@ -1,4 +1,4 @@
-const cloudinary = require('cloudinary');
+import { v2 as cloudinary } from 'cloudinary';
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -6,8 +6,10 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_SECRET,
 });
 
+export { cloudinary };
+
 // import and parse req object as param
-exports.upload = async (req, options) => {
+export const upload = async (req, options) => {
   try {
     let file = req.body?.avatar || req.body?.image || req.body?.images;
     if (file) {

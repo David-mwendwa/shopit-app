@@ -1,46 +1,46 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Header from './components/layout/Header';
-import Footer from './components/layout/Footer';
+import Header from './components/layout/Header.jsx';
+import Footer from './components/layout/Footer.jsx';
 
 import './App.css';
-import Home from './components/Home';
-import ProductDetails from './components/product/ProductDetails';
+import Home from './components/Home.jsx';
+import ProductDetails from './components/product/ProductDetails.jsx';
 
 // Auth or User Imports
-import Login from './components/user/Login';
-import Register from './components/user/Register';
-import Profile from './components/user/Profile';
-import UpdateProfile from './components/user/UpdateProfile';
-import UpdatePassword from './components/user/UpdatePassword';
-import ForgotPassword from './components/user/ForgotPassword';
-import ResetPassword from './components/user/ResetPassword';
+import Login from './components/user/Login.jsx';
+import Register from './components/user/Register.jsx';
+import Profile from './components/user/Profile.jsx';
+import UpdateProfile from './components/user/UpdateProfile.jsx';
+import UpdatePassword from './components/user/UpdatePassword.jsx';
+import ForgotPassword from './components/user/ForgotPassword.jsx';
+import ResetPassword from './components/user/ResetPassword.jsx';
 
 // Admin Imports
-import Dashboard from './components/admin/Dashboard';
-import ProductsList from './components/admin/ProductsList';
-import NewProduct from './components/admin/NewProduct';
-import UpdateProduct from './components/admin/UpdateProduct';
-import OrdersList from './components/admin/OrdersList';
-import ProcessOrder from './components/admin/ProcessOrder';
-import UsersList from './components/admin/UsersList';
-import UpdateUser from './components/admin/UpdateUser';
-import ProductReviews from './components/admin/ProductReviews';
+import Dashboard from './components/admin/Dashboard.jsx';
+import ProductsList from './components/admin/ProductsList.jsx';
+import NewProduct from './components/admin/NewProduct.jsx';
+import UpdateProduct from './components/admin/UpdateProduct.jsx';
+import OrdersList from './components/admin/OrdersList.jsx';
+import ProcessOrder from './components/admin/ProcessOrder.jsx';
+import UsersList from './components/admin/UsersList.jsx';
+import UpdateUser from './components/admin/UpdateUser.jsx';
+import ProductReviews from './components/admin/ProductReviews.jsx';
 
 // Cart Imports
-import Cart from './components/cart/Cart';
-import Shipping from './components/cart/Shipping';
-import ConfirmOrder from './components/cart/ConfirmOrder';
-import Payment from './components/cart/Payment';
-import OrderSuccess from './components/cart/OrderSuccess';
+import Cart from './components/cart/Cart.jsx';
+import Shipping from './components/cart/Shipping.jsx';
+import ConfirmOrder from './components/cart/ConfirmOrder.jsx';
+import Payment from './components/cart/Payment.jsx';
+import OrderSuccess from './components/cart/OrderSuccess.jsx';
 
 // Order Imports
-import ListOrders from './components/order/ListOrders';
-import OrderDetails from './components/order/OrderDetails';
+import ListOrders from './components/order/ListOrders.jsx';
+import OrderDetails from './components/order/OrderDetails.jsx';
 
-import Protected from './components/route/Protected';
+import Protected from './components/route/Protected.jsx';
 import { useSelector } from 'react-redux';
-import { loadUser } from './actions/userActions';
+import { loadUser } from './actions/userActions.js';
 import store from './store';
 import axios from 'axios';
 
