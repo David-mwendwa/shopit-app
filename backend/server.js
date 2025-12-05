@@ -154,6 +154,31 @@ app.use('/api/v1', orderRoutes);
 app.use('/api/v1', paymentRoutes);
 
 // =====================
+// SERVE STATIC FILES (Production Only)
+// =====================
+if (/production/.test(process.env.NODE_ENV)) {
+  // Serve static files with 1-year cache for better performance
+  app.use(
+    express.static(path.join(__dirname, '../frontend/dist'), {
+      maxAge: '1y',
+      setHeaders: (res, path) => {
+        if (path.endsWith('.html')) {
+          res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+        }
+      },
+    })
+  );
+
+  // Handle Single Page Application (SPA) routing
+  app.get('*', (req, res) => {
+    if (req.path.startsWith('/api/')) {
+      return res.status(404).json({ message: 'Not Found' });
+    }
+    res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+  });
+}
+
+// =====================
 // ERROR HANDLING
 // =====================
 import notFoundMiddleware from './middleware/notFound.js';
