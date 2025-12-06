@@ -4,6 +4,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 import 'express-async-errors';
 import 'dotenv/config.js';
 import mongoose from 'mongoose';
+
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import express from 'express';
@@ -40,10 +41,7 @@ app.set('trust proxy', 1); // trust first proxy (Render)
 // Enable CORS
 app.use(
   cors({
-    origin: [
-      'http://localhost:3000',
-      'https://markethub.netlify.app',
-    ],
+    origin: ['http://localhost:3000', 'https://markethub.netlify.app'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -193,6 +191,8 @@ app.use(errorHandlerMiddleware);
 // =====================
 // DATABASE CONNECTION
 // =====================
+mongoose.set('strictQuery', false);
+
 if (!process.env.MONGO_URI) {
   console.error('MONGO_URI is not defined in environment variables');
   process.exit(1);
